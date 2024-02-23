@@ -8,11 +8,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.Setter;
 
+@Table(name="users")
 @Entity
+@Setter
 @Getter
-@Table(name = "users")
 public class User {
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
