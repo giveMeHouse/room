@@ -15,17 +15,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PostDomainService {
+
     //포스트 레포지토리 주입
     private final PostRepository postRepository;
 
 
-    public void savePost(Post savePost){
+    public void savePost(Post savePost) {
         postRepository.save(savePost);
     }
 
 
     //Post Id 검증 메서드
-    public PostResponseDto getPostId(Long postId){
+    public PostResponseDto getPostId(Long postId) {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException(postId + "를 찾을수 없습니다."));
         PostResponseDto postResponseDto = new PostResponseDto(post);
@@ -66,5 +67,8 @@ public class PostDomainService {
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
 
+    public List<Post> findByUserId(Long id) {
+        return postRepository.findByUserId(id);
+    }
 }
 
