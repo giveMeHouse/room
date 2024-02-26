@@ -3,7 +3,7 @@ package com.sns.room.post.controller;
 
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
-import com.sns.room.post.service.PostService;
+import com.sns.room.post.business.PostService;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,6 @@ public class PostController {
     @GetMapping("/posts")
     public ResponseEntity<List<PostResponseDto>> getAllPost() {
         List<PostResponseDto> postList = postService.findAllPost();
-        ;
         return ResponseEntity.ok(postList);
     }
 
@@ -72,5 +71,6 @@ public class PostController {
         Long userId = userDetails.getUser().getId();
         return postService.updatePost(postId, requestDto, userId);
     }
+
 
 }
