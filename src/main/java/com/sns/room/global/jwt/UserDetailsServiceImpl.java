@@ -1,4 +1,4 @@
-package com.sns.room.user.jwt;
+package com.sns.room.global.jwt;
 
 import com.sns.room.user.repository.UserRepository;
 import com.sns.room.user.entity.User;

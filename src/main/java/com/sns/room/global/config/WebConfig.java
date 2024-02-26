@@ -1,10 +1,9 @@
-package com.sns.room.user.config;
+package com.sns.room.global.config;
 
-import com.sns.room.user.jwt.JwtAuthenticationFilter;
-import com.sns.room.user.jwt.JwtAuthorizationFilter;
-import com.sns.room.user.jwt.JwtUtil;
-import com.sns.room.user.jwt.UserDetailsServiceImpl;
-import javax.swing.plaf.PanelUI;
+import com.sns.room.global.jwt.JwtAuthenticationFilter;
+import com.sns.room.global.jwt.JwtAuthorizationFilter;
+import com.sns.room.global.jwt.JwtUtil;
+import com.sns.room.global.jwt.UserDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -42,7 +40,6 @@ public class WebConfig {
 		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
 		return filter;
 	}
-
 	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
 		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);

@@ -1,4 +1,4 @@
-package com.sns.room.user.jwt;
+package com.sns.room.global.jwt;
 
 import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;

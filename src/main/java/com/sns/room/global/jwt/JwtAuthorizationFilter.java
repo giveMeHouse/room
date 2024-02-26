@@ -1,4 +1,4 @@
-package com.sns.room.user.jwt;
+package com.sns.room.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;

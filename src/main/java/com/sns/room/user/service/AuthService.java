@@ -4,7 +4,7 @@ import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;
-import com.sns.room.user.jwt.JwtUtil;
+import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -48,12 +48,11 @@ public class AuthService {
 		User user = userRepository.findByUsername(username).orElseThrow(
 				() -> new IllegalArgumentException("존재하지 않는 email입니다.")
 		);
-
 		if (!passwordEncoder.matches(password, user.getPassword())) {
 			throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
 		}
-
 		String token = jwtUtil.createToken(user.getUsername(),user.getRole());
 		jwtUtil.addJwtToHeader(token,res);
 	}
 }
+

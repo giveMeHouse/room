@@ -1,4 +1,4 @@
-package com.sns.room.user.jwt;
+package com.sns.room.global.jwt;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sns.room.user.dto.LoginRequestDto;
