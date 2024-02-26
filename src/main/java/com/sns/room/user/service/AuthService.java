@@ -2,6 +2,7 @@ package com.sns.room.user.service;
 
 import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.user.dto.LoginRequestDto;
+import com.sns.room.user.dto.PasswordUpdateRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.dto.UserRequestDto;
 import com.sns.room.user.dto.UserResponseDto;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -82,6 +84,38 @@ public class AuthService {
         user.setIntroduce(userRequestDto.getIntroduce());
         userRepository.save(user);
         return new UserResponseDto(user);
+    }
+
+    @Transactional
+    public void updatePassword(UserDetailsImpl userDetails,
+        PasswordUpdateRequestDto passwordUpdateRequestDto) {
+        // 토큰으로 id 가져오기
+        Long userId = userDetails.getUser().getId();
+        // DB에 접근
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("선택한 유저가 존재하지 않습니다."));
+
+        // 기존 비밀번호 확인
+        validatePassword(passwordUpdateRequestDto.getPassword(), user.getPassword());
+
+        // 새 비밀번호와 새 비밀번호 확인 값 비교
+        validateNewPassword(passwordUpdateRequestDto.getChangePassword(), passwordUpdateRequestDto.getChangePasswordCheck());
+
+        // 변경
+        user.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getChangePassword()));
+        userRepository.save(user);
+    }
+
+    public void validatePassword(String rawPassword, String encodedPassword) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
+            throw new BadCredentialsException("패스워드를 잘못 입력하셨습니다.");
+        }
+    }
+
+    private void validateNewPassword(String newPassword, String checkPassword) {
+        if (!newPassword.equals(checkPassword)) {
+            throw new BadCredentialsException("기존 비밀번호와 동일합니다.");
+        }
     }
 
 

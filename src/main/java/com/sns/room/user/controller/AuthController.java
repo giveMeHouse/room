@@ -1,6 +1,7 @@
 package com.sns.room.user.controller;
 
 import com.sns.room.global.jwt.UserDetailsImpl;
+import com.sns.room.user.dto.PasswordUpdateRequestDto;
 import com.sns.room.user.dto.ResponseDto;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
@@ -94,6 +95,16 @@ public class AuthController {
                 .build());
     }
 
+    @PutMapping("/password-patch")
+    public ResponseEntity<ResponseDto<String>> updatePassword(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestBody PasswordUpdateRequestDto passwordUpdateRequestDto) {
 
+        authService.updatePassword(userDetails, passwordUpdateRequestDto);
+        return ResponseEntity.ok()
+            .body(ResponseDto.<String>builder()
+                .message("비밀번호 수정 성공")
+                .build());
+    }
 
 }
