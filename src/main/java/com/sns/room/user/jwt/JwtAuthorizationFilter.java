@@ -29,7 +29,7 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
 	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
 
 
-		if (!req.getRequestURI().contains("/user/signup")) {
+		if (!req.getRequestURI().contains("/auth/signup")) {
 			String tokenValue = jwtUtil.getJwtFromHeader(req);
 
 			if (StringUtils.hasText(tokenValue)) {
