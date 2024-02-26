@@ -4,9 +4,11 @@ import com.sns.room.comment.dto.CommentRequestDto;
 import com.sns.room.comment.dto.CommentResponseDto;
 import com.sns.room.comment.dto.ResponseDto;
 import com.sns.room.comment.service.CommentService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -16,12 +18,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/posts/{postId}")
+@RequestMapping("/posts/{postId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("/comments")
+    @PostMapping("")
     public ResponseEntity<ResponseDto> createComment(@PathVariable Long postId,
         @RequestBody CommentRequestDto commentRequestDto) {
         long userId = 1L;
@@ -30,7 +32,7 @@ public class CommentController {
         return ResponseEntity.ok().body(new ResponseDto("댓글 생성 성공", responseDto));
     }
 
-    @PutMapping("comments/{commentId}")
+    @PutMapping("/{commentId}")
     public ResponseEntity<ResponseDto> updateComment(@PathVariable Long postId,
         @PathVariable Long commentId,
         @RequestBody CommentRequestDto commentRequestDto) {
@@ -40,11 +42,16 @@ public class CommentController {
         return ResponseEntity.ok().body(new ResponseDto("댓글 수정 성공", responseDto));
     }
 
-    @DeleteMapping("comments/{commentId}")
+    @DeleteMapping("/{commentId}")
     public ResponseEntity<ResponseDto> deleteComment(@PathVariable Long postId,
         @PathVariable Long commentId) {
         long userId = 1L;
         CommentResponseDto responseDto = commentService.deleteComment(postId, userId, commentId);
         return ResponseEntity.ok().body(new ResponseDto("댓글 삭제 성공", responseDto));
+    }
+
+    @GetMapping("")
+    public List<CommentResponseDto> getAllComment() {
+        return commentService.getAllComment();
     }
 }

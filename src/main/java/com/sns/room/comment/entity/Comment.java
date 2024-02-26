@@ -10,12 +10,15 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@SQLRestriction("deleted_at is NULL")
 @Table(name = "comments")
 public class Comment {
 
@@ -25,6 +28,9 @@ public class Comment {
 
     @Column(nullable = false)
     private String comment;
+
+    @Column
+    private LocalDateTime deleted_at = null; // 기본값을 null로 설정
 
     @ManyToOne
     @JoinColumn(name = "userId")
@@ -42,5 +48,9 @@ public class Comment {
 
     public void Update(String comment) {
         this.comment = comment;
+    }
+
+    public void SoftDeleted() {
+        this.deleted_at = LocalDateTime.now();
     }
 }
