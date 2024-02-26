@@ -4,6 +4,7 @@ import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.user.dto.ResponseDto;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
+import com.sns.room.user.dto.UserRequestDto;
 import com.sns.room.user.dto.UserResponseDto;
 import com.sns.room.user.service.AuthService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -17,6 +18,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -78,5 +80,20 @@ public class AuthController {
                 .data(userResponseDto)
                 .build());
     }
+
+    @PutMapping("/mypage")
+    public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @RequestBody UserRequestDto userRequestDto) {
+
+        UserResponseDto updatedUser = authService.updateUser(userDetails, userRequestDto);
+        return ResponseEntity.ok()
+            .body(ResponseDto.<UserResponseDto>builder()
+                .message("프로필 수정 성공")
+                .data(updatedUser)
+                .build());
+    }
+
+
 
 }

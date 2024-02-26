@@ -3,6 +3,7 @@ package com.sns.room.user.service;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
+import com.sns.room.user.dto.UserRequestDto;
 import com.sns.room.user.dto.UserResponseDto;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;
@@ -11,11 +12,16 @@ import com.sns.room.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
+@Transactional(readOnly = true)
+@Slf4j
 public class AuthService {
 
     private final UserRepository userRepository;
@@ -60,6 +66,21 @@ public class AuthService {
 
     public static UserResponseDto getUser(UserDetailsImpl userDetails) {
         User user = userDetails.getUser();
+        return new UserResponseDto(user);
+    }
+
+    @Transactional
+    public UserResponseDto updateUser(@AuthenticationPrincipal UserDetailsImpl userDetails,
+        UserRequestDto userRequestDto) {
+        // 토큰으로 id 가져오기
+        Long userId = userDetails.getUser().getId();
+        // DB에 접근
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("선택한 유저가 존재하지 않습니다."));
+        // 변경
+        user.setUsername(userRequestDto.getUsername());
+        user.setIntroduce(userRequestDto.getIntroduce());
+        userRepository.save(user);
         return new UserResponseDto(user);
     }
 
