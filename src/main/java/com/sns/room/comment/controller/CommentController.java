@@ -25,7 +25,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<ResponseDto> createComment(@PathVariable Long postId,
         @RequestBody CommentRequestDto commentRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -53,7 +53,7 @@ public class CommentController {
         return ResponseEntity.ok().body(new ResponseDto("댓글 삭제 성공", responseDto));
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<CommentResponseDto> getAllComment() {
         return commentService.getAllComment();
     }
