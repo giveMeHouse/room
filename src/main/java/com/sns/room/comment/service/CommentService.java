@@ -85,7 +85,6 @@ public class CommentService {
         for (Comment comment : commentList) {
             responseDtoList.add(new CommentResponseDto(comment.getPost().getTitle(),
                 comment.getUser().getUsername(), comment.getComment()));
-
         }
 
         return responseDtoList;
@@ -123,7 +122,7 @@ public class CommentService {
     // 댓글을 수정/삭제할 권한이 있는 유저인지 검증
     private boolean isValidUser(User user, Comment comment) {
         if (!comment.getUser().getId().equals(user.getId())) {
-            throw new InvalidUserException("작성자만 삭제가능합니다.");
+            throw new InvalidUserException("작성자만 수정/삭제가능합니다.");
         }
         return true;
     }
