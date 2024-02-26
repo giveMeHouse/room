@@ -4,6 +4,7 @@ import com.sns.room.comment.dto.CommentRequestDto;
 import com.sns.room.comment.dto.CommentResponseDto;
 import com.sns.room.comment.entity.Comment;
 import com.sns.room.comment.repository.CommentRepository;
+import com.sns.room.global.exception.InvalidCommentException;
 import com.sns.room.global.exception.InvalidPostException;
 import com.sns.room.global.exception.InvalidUserException;
 import com.sns.room.post.entity.Post;
@@ -12,6 +13,7 @@ import com.sns.room.user.entity.User;
 import com.sns.room.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +38,24 @@ public class CommentService {
             comment.getComment());
     }
 
+    @Transactional
+    public CommentResponseDto updateComment(CommentRequestDto commentRequestDto, long postId,
+        long userId, long commentId) {
+        Post post = checkPost(postId);
+
+        User user = checkUser(userId);
+
+        Comment comment = checkComment(commentId);
+
+        isValidPost(post, comment);
+
+        isValidUser(user, comment);
+
+        comment.Update(commentRequestDto.getComment());
+
+        return new CommentResponseDto(comment.getPost().getTitle(), comment.getUser().getUsername(),
+            comment.getComment());
+    }
 
     // 존재하는 게시글인지 검증
     private Post checkPost(long postId) {
@@ -49,6 +69,29 @@ public class CommentService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new InvalidUserException("존재하지 않는 유저입니다."));
         return user;
+    }
+
+    // 존재하는 댓글인지 검증
+    private Comment checkComment(long commentId){
+        Comment comment = commentRepository.findById(commentId).orElseThrow(
+            InvalidCommentException::new);
+        return comment;
+    }
+
+    // 댓글이 달려있는 게시글인지 검증
+    private boolean isValidPost(Post post, Comment comment){
+        if (!post.getId().equals(comment.getPost().getId())) {
+            throw new InvalidPostException("올바르지 않은 게시글입니다.");
+        }
+        return true;
+    }
+
+    // 댓글을 수정/삭제할 권한이 있는 유저인지 검증
+    private boolean isValidUser(User user, Comment comment){
+        if (!comment.getUser().getId().equals(user.getId())) {
+            throw new InvalidUserException("작성자만 삭제가능합니다.");
+        }
+        return true;
     }
 
 
