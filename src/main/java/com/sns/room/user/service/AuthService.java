@@ -16,43 +16,44 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-	private final UserRepository userRepository;
-	private final PasswordEncoder passwordEncoder;
-	private final JwtUtil jwtUtil;
-	private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZaHgTBcXukeZygoC";
-	public void signup(SignupRequestDto signupRequestDto) {
-		String username = signupRequestDto.getUsername();
-		String email = signupRequestDto.getEmail();
-		String password = passwordEncoder.encode(signupRequestDto.getPassword());
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
+    private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZaHgTBcXukeZygoC";
 
-		Optional<User> checkEmail = userRepository.findByEmail(email);
-		if (checkEmail.isPresent()) {
-			throw new IllegalArgumentException("중복된 email입니다.");
-		}
+    public void signup(SignupRequestDto signupRequestDto) {
+        String username = signupRequestDto.getUsername();
+        String email = signupRequestDto.getEmail();
+        String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
-		UserRoleEnum role = signupRequestDto.getRole();
-		if (role.equals(UserRoleEnum.ADMIN)) {
-			if (!ADMIN_TOKEN.equals(signupRequestDto.getAdminToken())) {
-				throw new IllegalArgumentException("관리자 암호가 일치하지 않습니다.");
-			}
-		}
+        Optional<User> checkEmail = userRepository.findByEmail(email);
+        if (checkEmail.isPresent()) {
+            throw new IllegalArgumentException("중복된 email입니다.");
+        }
 
-		User user = new User(username, email, password, role);
-		userRepository.save(user);
-	}
+        UserRoleEnum role = signupRequestDto.getRole();
+        if (role.equals(UserRoleEnum.ADMIN)) {
+            if (!ADMIN_TOKEN.equals(signupRequestDto.getAdminToken())) {
+                throw new IllegalArgumentException("관리자 암호가 일치하지 않습니다.");
+            }
+        }
 
-	public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
-		String username = loginRequestDto.getUsername();
-		String password = loginRequestDto.getPassword();
+        User user = new User(username, email, password, role);
+        userRepository.save(user);
+    }
 
-		User user = userRepository.findByUsername(username).orElseThrow(
-				() -> new IllegalArgumentException("존재하지 않는 email입니다.")
-		);
-		if (!passwordEncoder.matches(password, user.getPassword())) {
-			throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
-		}
-		String token = jwtUtil.createToken(user.getUsername(),user.getRole());
-		jwtUtil.addJwtToHeader(token,res);
-	}
+    public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
+        String username = loginRequestDto.getUsername();
+        String password = loginRequestDto.getPassword();
+
+        User user = userRepository.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("존재하지 않는 email입니다.")
+        );
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+        }
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
+        jwtUtil.addJwtToHeader(token, res);
+    }
 }
 

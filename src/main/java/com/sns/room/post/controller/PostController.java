@@ -20,21 +20,27 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-public class PostController{
+public class PostController {
+
     private final PostService postService;
+
     //게시글 등록
     @PostMapping("/posts")
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto ,@AuthenticationPrincipal
+    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto,
+        @AuthenticationPrincipal
         UserDetailsImpl userDetails) {
         Long loginUserId = userDetails.getUser().getId();
-        return ResponseEntity.ok(postService.createPost(requestDto,loginUserId));
+        return ResponseEntity.ok(postService.createPost(requestDto, loginUserId));
     }
+
     //게시글 전체 조회
     @GetMapping("/posts")
-    public ResponseEntity<List<PostResponseDto>> getAllPost(){
-        List<PostResponseDto> postList = postService.findAllPost();;
+    public ResponseEntity<List<PostResponseDto>> getAllPost() {
+        List<PostResponseDto> postList = postService.findAllPost();
+        ;
         return ResponseEntity.ok(postList);
     }
+
     //게시글 선택 조회
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
@@ -42,12 +48,14 @@ public class PostController{
             .status(HttpStatus.OK)
             .body(postService.getPost(postId));
     }
+
     //게시글 삭제
     @DeleteMapping("/posts/{postId}")
-    public ResponseEntity<?> deletePost(@PathVariable Long postId,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<?> deletePost(@PathVariable Long postId,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         try {
-            postService.delete(postId,userId);
+            postService.delete(postId, userId);
             return ResponseEntity.ok("게시글이 성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             return ResponseEntity
@@ -55,9 +63,12 @@ public class PostController{
                 .body("게시글 삭제 오류");
         }
     }
+
     //게시글 수정
     @PutMapping("/posts/{postId}")
-    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId, @RequestBody PostRequestDto requestDto,@AuthenticationPrincipal UserDetailsImpl userDetails) {
+    public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId,
+        @RequestBody PostRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         return postService.updatePost(postId, requestDto, userId);
     }

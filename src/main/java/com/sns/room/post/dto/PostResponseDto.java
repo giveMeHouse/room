@@ -6,12 +6,14 @@ import lombok.Getter;
 
 @Getter
 public class PostResponseDto {
+
     private String title;
     private String content;
     private String username;
     private String photo;
     private LocalDateTime createdAt;
     private LocalDateTime modifiedAt;
+
     public PostResponseDto(Post post) {
         this.title = post.getTitle();
         this.content = post.getContent();

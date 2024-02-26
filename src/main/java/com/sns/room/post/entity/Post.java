@@ -19,9 +19,10 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name="posts")
+@Table(name = "posts")
 
 public class Post {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -46,7 +47,7 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public Post(PostRequestDto requestDto,User user) {
+    public Post(PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
         this.user = user;
@@ -54,7 +55,8 @@ public class Post {
         this.createAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
-    public void updatePost(String title,String content){
+
+    public void updatePost(String title, String content) {
         this.title = title;
         this.content = content;
         this.modifiedAt = LocalDateTime.now();

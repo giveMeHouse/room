@@ -14,45 +14,49 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
-public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter{
-		private final JwtUtil jwtUtil;
+public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
-		public JwtAuthenticationFilter(JwtUtil jwtUtil) {
-			this.jwtUtil = jwtUtil;
-			setFilterProcessesUrl("/api/auth/login");
-		}
+    private final JwtUtil jwtUtil;
 
-		@Override
-		public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-			try {
-				LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(), LoginRequestDto.class);
+    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+        setFilterProcessesUrl("/api/auth/login");
+    }
 
-				return getAuthenticationManager().authenticate(
-						new UsernamePasswordAuthenticationToken(
-								requestDto.getUsername(),
-								requestDto.getPassword()
-						)
-				);
-			} catch (IOException e) {
-				log.error(e.getMessage());
-				throw new RuntimeException(e.getMessage());
-			}
-		}
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request,
+        HttpServletResponse response) throws AuthenticationException {
+        try {
+            LoginRequestDto requestDto = new ObjectMapper().readValue(request.getInputStream(),
+                LoginRequestDto.class);
 
-		@Override
-		protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) {
-			String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-			UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+            return getAuthenticationManager().authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    requestDto.getUsername(),
+                    requestDto.getPassword()
+                )
+            );
+        } catch (IOException e) {
+            log.error(e.getMessage());
+            throw new RuntimeException(e.getMessage());
+        }
+    }
 
-			String token = jwtUtil.createToken(username, role);
-			response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request,
+        HttpServletResponse response, FilterChain chain, Authentication authResult) {
+        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
+        UserRoleEnum role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRole();
+        String token = jwtUtil.createToken(username, role);
+        response.addHeader(JwtUtil.AUTHORIZATION_HEADER, token);
 
 
-		}
+    }
 
-		@Override
-		protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) {
-			response.setStatus(401);
-		}
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request,
+        HttpServletResponse response, AuthenticationException failed) {
+        response.setStatus(401);
+    }
 
 }

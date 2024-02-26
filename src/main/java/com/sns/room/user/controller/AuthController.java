@@ -17,49 +17,51 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
 
-	private final AuthService authService;
-	@PostMapping("/signup")
-	public ResponseEntity<CommonResponse<String>> signup(
-			@RequestBody SignupRequestDto signupRequestDto,
-			BindingResult bindingResult) {
+    private final AuthService authService;
 
-			if (bindingResult.hasErrors()) {
-				List<String> errorMessages = new ArrayList<>();
-				for (FieldError error : bindingResult.getFieldErrors()) {
-					errorMessages.add(error.getDefaultMessage());
-				}
-				return ResponseEntity.badRequest().body(
-						CommonResponse.<String>builder()
-								.data(null).message("회원가입 실패 :" + errorMessages).build()
-				);
-			}
+    @PostMapping("/signup")
+    public ResponseEntity<CommonResponse<String>> signup(
+        @RequestBody SignupRequestDto signupRequestDto,
+        BindingResult bindingResult) {
 
-		authService.signup(signupRequestDto);
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(
+                CommonResponse.<String>builder()
+                    .data(null).message("회원가입 실패 :" + errorMessages).build()
+            );
+        }
 
-			return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				CommonResponse.<String>builder().data(
-						signupRequestDto.getUsername()
-				).message("회원가입 성공").build()
-		);
-	}
+        authService.signup(signupRequestDto);
 
-	@GetMapping("/login")
-	public ResponseEntity<CommonResponse<String>> login(
-			@RequestBody LoginRequestDto loginRequestDto,
-			HttpServletResponse res) {
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
+            CommonResponse.<String>builder().data(
+                signupRequestDto.getUsername()
+            ).message("회원가입 성공").build()
+        );
+    }
 
-		authService.login(loginRequestDto, res);
+    @GetMapping("/login")
+    public ResponseEntity<CommonResponse<String>> login(
+        @RequestBody LoginRequestDto loginRequestDto,
+        HttpServletResponse res) {
 
-		return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				CommonResponse.<String>builder().data(
-						loginRequestDto.getUsername()
-				).message("로그인 성공").build()
-		);
-	}
+        authService.login(loginRequestDto, res);
+
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
+            CommonResponse.<String>builder().data(
+                loginRequestDto.getUsername()
+            ).message("로그인 성공").build()
+        );
+    }
 
 }

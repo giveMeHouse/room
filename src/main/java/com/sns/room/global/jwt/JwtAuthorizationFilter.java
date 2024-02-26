@@ -17,58 +17,60 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Slf4j(topic = "JWT 검증 및 인가")
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
-	private final JwtUtil jwtUtil;
-	private final UserDetailsServiceImpl userDetailsService;
 
-	public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
-		this.jwtUtil = jwtUtil;
-		this.userDetailsService = userDetailsService;
-	}
+    private final JwtUtil jwtUtil;
+    private final UserDetailsServiceImpl userDetailsService;
 
-	@Override
-	protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain filterChain) throws ServletException, IOException {
+    public JwtAuthorizationFilter(JwtUtil jwtUtil, UserDetailsServiceImpl userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
-
-		if (!req.getRequestURI().contains("/auth/signup")) {
-			String tokenValue = jwtUtil.getJwtFromHeader(req);
-
-			if (StringUtils.hasText(tokenValue)) {
-
-				if (!jwtUtil.validateToken(tokenValue)) {
-					log.error("Token Error");
-					return;
-				}
-
-				Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
-				System.out.println("info = " + info);
-				try {
-					setAuthentication(info.getSubject());
-
-				} catch (Exception e) {
-					log.error(e.getMessage());
-					return;
-				}
-			}
-
-		}
+    @Override
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res,
+        FilterChain filterChain) throws ServletException, IOException {
 
 
+        if (!req.getRequestURI().contains("/auth/signup")) {
+            String tokenValue = jwtUtil.getJwtFromHeader(req);
 
-		filterChain.doFilter(req, res);
-	}
+            if (StringUtils.hasText(tokenValue)) {
 
-	// 인증 처리
-	public void setAuthentication(String username) {
-		SecurityContext context = SecurityContextHolder.createEmptyContext();
-		Authentication authentication = createAuthentication(username);
-		context.setAuthentication(authentication);
+                if (!jwtUtil.validateToken(tokenValue)) {
+                    log.error("Token Error");
+                    return;
+                }
 
-		SecurityContextHolder.setContext(context);
-	}
+                Claims info = jwtUtil.getUserInfoFromToken(tokenValue);
+                System.out.println("info = " + info);
+                try {
+                    setAuthentication(info.getSubject());
 
-	// 인증 객체 생성
-	private Authentication createAuthentication(String username) {
-		UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-		return new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-	}
+                } catch (Exception e) {
+                    log.error(e.getMessage());
+                    return;
+                }
+            }
+
+        }
+
+
+        filterChain.doFilter(req, res);
+    }
+
+    // 인증 처리
+    public void setAuthentication(String username) {
+        SecurityContext context = SecurityContextHolder.createEmptyContext();
+        Authentication authentication = createAuthentication(username);
+        context.setAuthentication(authentication);
+
+        SecurityContextHolder.setContext(context);
+    }
+
+    // 인증 객체 생성
+    private Authentication createAuthentication(String username) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        return new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
+    }
 }

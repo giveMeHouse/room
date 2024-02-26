@@ -14,24 +14,25 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Table(name="users")
+@Table(name = "users")
 @NoArgsConstructor
 public class User {
-		@Id
-		@GeneratedValue(strategy = GenerationType.IDENTITY)
-		private Long id;
 
-		@Column(nullable = false)
-		private String email;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-		@Column(nullable = false)
-		private String username;
+    @Column(nullable = false)
+    private String email;
 
-		@Column(nullable = false)
-		private String password;
+    @Column(nullable = false)
+    private String username;
 
-		@Enumerated(value = EnumType.STRING)
-		private UserRoleEnum role;
+    @Column(nullable = false)
+    private String password;
+
+    @Enumerated(value = EnumType.STRING)
+    private UserRoleEnum role;
 
 //		@Column
 //		private String introduce;
@@ -39,10 +40,10 @@ public class User {
 //		@Column(nullable = false)
 //		private LocalDateTime createAt;
 
-		public User(String username, String email, String password, UserRoleEnum role) {
-			this.username = username;
-			this.email = email;
-			this.password = password;
-			this.role = role;
-		}
+    public User(String username, String email, String password, UserRoleEnum role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
 }
