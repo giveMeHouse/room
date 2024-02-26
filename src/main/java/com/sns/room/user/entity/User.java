@@ -16,9 +16,11 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 @Table(name = "users")
 @NoArgsConstructor
 public class User {
@@ -39,9 +41,9 @@ public class User {
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
+    @Column
+    private String introduce;
 
-//		@Column
-//		private String introduce;
 //
 //		@Column(nullable = false)
 //		private LocalDateTime createAt;

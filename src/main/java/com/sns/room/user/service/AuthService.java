@@ -1,7 +1,9 @@
 package com.sns.room.user.service;
 
+import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
+import com.sns.room.user.dto.UserResponseDto;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;
 import com.sns.room.global.jwt.JwtUtil;
@@ -55,5 +57,12 @@ public class AuthService {
         String token = jwtUtil.createToken(user.getUsername(), user.getRole());
         jwtUtil.addJwtToHeader(token, res);
     }
+
+    public static UserResponseDto getUser(UserDetailsImpl userDetails) {
+        User user = userDetails.getUser();
+        return new UserResponseDto(user);
+    }
+
+
 }
 
