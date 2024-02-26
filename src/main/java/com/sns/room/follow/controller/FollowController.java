@@ -5,6 +5,7 @@ import com.sns.room.follow.dto.FollowerResponseDto;
 import com.sns.room.follow.dto.FollowingResponseDto;
 import com.sns.room.follow.service.FollowService;
 import com.sns.room.global.jwt.UserDetailsImpl;
+import com.sns.room.post.dto.PostResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -55,5 +56,13 @@ public class FollowController {
                 followService.getFollowerList(userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followerResponseDtos).getBody();
+    }
+
+    @GetMapping("/follows/todo")
+    public ResponseEntity<List<PostResponseDto>> getAllFollowingPost(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<PostResponseDto> postResponseDtos =
+                followService.getAllFollowingPost(userDetails.getUser());
+        return ResponseEntity.status(HttpStatus.OK.value()).body(postResponseDtos);
     }
 }
