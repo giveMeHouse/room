@@ -1,6 +1,7 @@
 package com.sns.room.follow.controller;
 
 import com.sns.room.follow.dto.FollowResponseDto;
+import com.sns.room.follow.dto.FollowerResponseDto;
 import com.sns.room.follow.dto.FollowingResponseDto;
 import com.sns.room.follow.service.FollowService;
 import com.sns.room.global.jwt.UserDetailsImpl;
@@ -45,5 +46,14 @@ public class FollowController {
                 followService.getFollowingList(userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followingResponseDtos).getBody();
+    }
+
+    @GetMapping("/follows/follower")
+    public List<FollowerResponseDto> getFollowerList(
+            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        List<FollowerResponseDto> followerResponseDtos =
+                followService.getFollowerList(userDetails.getUser());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).body(followerResponseDtos).getBody();
     }
 }

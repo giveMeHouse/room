@@ -1,5 +1,6 @@
 package com.sns.room.follow.service;
 
+import com.sns.room.follow.dto.FollowerResponseDto;
 import com.sns.room.follow.dto.FollowingResponseDto;
 import com.sns.room.follow.entity.Follow;
 import com.sns.room.follow.repository.FollowRepository;
@@ -51,6 +52,14 @@ public class FollowService {
 
         return follows.stream()
                 .map(FollowingResponseDto::new)
+                .collect(Collectors.toList());
+    }
+
+    public List<FollowerResponseDto> getFollowerList(User toUser) {
+        List<Follow> follows = followRepository.findAllByToUserId(toUser.getId());
+
+        return follows.stream()
+                .map(FollowerResponseDto::new)
                 .collect(Collectors.toList());
     }
 }
