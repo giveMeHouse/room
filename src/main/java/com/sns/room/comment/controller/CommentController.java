@@ -6,6 +6,7 @@ import com.sns.room.comment.dto.ResponseDto;
 import com.sns.room.comment.service.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,5 +38,13 @@ public class CommentController {
         CommentResponseDto responseDto = commentService.updateComment(commentRequestDto, postId,
             userId, commentId);
         return ResponseEntity.ok().body(new ResponseDto("댓글 수정 성공", responseDto));
+    }
+
+    @DeleteMapping("comments/{commentId}")
+    public ResponseEntity<ResponseDto> deleteComment(@PathVariable Long postId,
+        @PathVariable Long commentId) {
+        long userId = 1L;
+        CommentResponseDto responseDto = commentService.deleteComment(postId, userId, commentId);
+        return ResponseEntity.ok().body(new ResponseDto("댓글 삭제 성공", responseDto));
     }
 }

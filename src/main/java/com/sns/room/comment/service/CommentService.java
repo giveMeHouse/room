@@ -57,6 +57,23 @@ public class CommentService {
             comment.getComment());
     }
 
+    public CommentResponseDto deleteComment(long postId, long userId, long commentId) {
+        Post post = checkPost(postId);
+
+        User user = checkUser(userId);
+
+        Comment comment = checkComment(commentId);
+
+        isValidPost(post, comment);
+
+        isValidUser(user, comment);
+
+        commentRepository.deleteById(comment.getCommentId());
+
+        return new CommentResponseDto(comment.getPost().getTitle(), comment.getUser().getUsername(),
+            comment.getComment());
+    }
+
     // 존재하는 게시글인지 검증
     private Post checkPost(long postId) {
         Post post = postRepository.findById(postId)
