@@ -32,4 +32,14 @@ public class FollowService {
 
         followRepository.save(follow);
     }
+
+    @Transactional
+    public void deleteFollow(User fromUser, Long toUserId) {
+        authService.findUser(toUserId);
+        Follow follow = followRepository.findByFromUserIdAndToUserId(fromUser.getId(), toUserId)
+                .orElseThrow(
+                        () -> new InvalidInputException("해당 팔로우를 찾을 수 없습니다.")
+                );
+        followRepository.delete(follow);
+    }
 }
