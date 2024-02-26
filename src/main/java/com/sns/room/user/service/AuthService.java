@@ -54,6 +54,7 @@ public class AuthService {
         }
         String token = jwtUtil.createToken(user.getUsername(), user.getRole());
         jwtUtil.addJwtToHeader(token, res);
+        res.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
     }
 }
 

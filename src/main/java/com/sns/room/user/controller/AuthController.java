@@ -50,7 +50,7 @@ public class AuthController {
         );
     }
 
-    @GetMapping("/login")
+    @PostMapping("/login")
     public ResponseEntity<CommonResponse<String>> login(
         @RequestBody LoginRequestDto loginRequestDto,
         HttpServletResponse res) {
