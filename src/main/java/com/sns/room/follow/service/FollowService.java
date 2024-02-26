@@ -1,10 +1,13 @@
 package com.sns.room.follow.service;
 
+import com.sns.room.follow.dto.FollowingResponseDto;
 import com.sns.room.follow.entity.Follow;
 import com.sns.room.follow.repository.FollowRepository;
 import com.sns.room.global.exception.InvalidInputException;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.service.AuthService;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,5 +44,13 @@ public class FollowService {
                         () -> new InvalidInputException("해당 팔로우를 찾을 수 없습니다.")
                 );
         followRepository.delete(follow);
+    }
+
+    public List<FollowingResponseDto> getFollowingList(User fromUser) {
+        List<Follow> follows = followRepository.findAllByFromUserId(fromUser.getId());
+
+        return follows.stream()
+                .map(FollowingResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
