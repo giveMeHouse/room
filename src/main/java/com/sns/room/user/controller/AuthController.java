@@ -74,7 +74,9 @@ public class AuthController {
     public ResponseEntity<ResponseDto<UserResponseDto>> getUser(
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
 
-        UserResponseDto userResponseDto = AuthService.getUser(userDetails);
+        Long userId = userDetails.getUser().getId();
+
+        UserResponseDto userResponseDto = authService.getUserProfile(userId);
         return ResponseEntity.ok()
             .body(ResponseDto.<UserResponseDto>builder()
                 .message("프로필 조회 성공")

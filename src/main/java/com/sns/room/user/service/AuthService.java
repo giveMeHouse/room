@@ -66,8 +66,9 @@ public class AuthService {
         jwtUtil.addJwtToHeader(token, res);
     }
 
-    public static UserResponseDto getUser(UserDetailsImpl userDetails) {
-        User user = userDetails.getUser();
+    public UserResponseDto getUserProfile(Long userId) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("사용자를 찾을 수 없습니다."));
         return new UserResponseDto(user);
     }
 
