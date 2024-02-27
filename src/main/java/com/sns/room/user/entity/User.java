@@ -10,8 +10,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Setter//test용
 @Getter
 @Table(name = "users")
 @NoArgsConstructor

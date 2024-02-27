@@ -80,6 +80,8 @@ public class PostService {
         }
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
+
+
     public Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(
             () -> {

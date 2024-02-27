@@ -21,6 +21,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Entity
 @Getter
 @NoArgsConstructor
+@Setter //test코드용 setter
 @Table(name = "posts")
 
 public class Post {
