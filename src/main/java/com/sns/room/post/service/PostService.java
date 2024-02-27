@@ -1,6 +1,7 @@
 package com.sns.room.post.service;
 
 
+import com.sns.room.global.exception.InvalidPostException;
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.entity.Post;
@@ -79,6 +80,16 @@ public class PostService {
         }
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
-
+    public Post findPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(
+            () -> {
+                String message = "해당 게시글이 없습니다.";
+                return new InvalidPostException(message);
+            }
+        );
+    }
+        public List<Post> findByUserId(Long id) {
+            return postRepository.findByUserId(id);
+        }
 }
 

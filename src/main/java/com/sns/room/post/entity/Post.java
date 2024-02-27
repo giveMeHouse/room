@@ -49,7 +49,6 @@ public class Post {
     @JoinColumn(name = "user_id")
     private User user;
 
-
     public Post(PostRequestDto requestDto, User user) {
         this.title = requestDto.getTitle();
         this.content = requestDto.getContent();
@@ -58,19 +57,12 @@ public class Post {
         this.createAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
     }
-//    public Post(String title,String content,String photo,LocalDateTime createAt,LocalDateTime modifiedAt,User user){
-//        this.title = title;
-//        this.content = content;
-//        this.user = user;
-//        this.photo = photo;
-//        this.createAt = LocalDateTime.now();
-//        this.modifiedAt = LocalDateTime.now();
-//    }
+
     public void updatePost(String title, String content) {
         this.title = title;
         this.content = content;
         this.modifiedAt = LocalDateTime.now();
     }
-    
+
 
 }
