@@ -92,15 +92,17 @@ public class AuthService {
         PasswordUpdateRequestDto passwordUpdateRequestDto) {
         // 토큰으로 id 가져오기
         Long userId = userDetails.getUser().getId();
+        System.out.println("Looking for user ID: " + userId);
         // DB에 접근
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("선택한 유저가 존재하지 않습니다."));
+        System.out.println("User found: " + user.getId());
 
         // 기존 비밀번호 확인
         validatePassword(passwordUpdateRequestDto.getPassword(), user.getPassword());
 
         // 새 비밀번호와 새 비밀번호 확인 값 비교
-        validateNewPassword(passwordUpdateRequestDto.getChangePassword(), passwordUpdateRequestDto.getChangePasswordCheck());
+        validateNewPassword(passwordUpdateRequestDto.getChangePassword(), user.getPassword(), passwordUpdateRequestDto.getChangePasswordCheck());
 
         // 변경
         user.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getChangePassword()));
@@ -109,13 +111,16 @@ public class AuthService {
 
     public void validatePassword(String rawPassword, String encodedPassword) {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
-            throw new BadCredentialsException("패스워드를 잘못 입력하셨습니다.");
+            throw new BadCredentialsException("이전 비밀번호가 일치하지 않습니다.");
         }
     }
 
-    private void validateNewPassword(String newPassword, String checkPassword) {
+    private void validateNewPassword(String newPassword, String oldEncodedPassword, String checkPassword) {
         if (!newPassword.equals(checkPassword)) {
-            throw new BadCredentialsException("기존 비밀번호와 동일합니다.");
+            throw new BadCredentialsException("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+        }
+        if (passwordEncoder.matches(newPassword, oldEncodedPassword)) {
+            throw new BadCredentialsException("새 비밀번호는 기존 비밀번호와 다르게 설정해야 합니다.");
         }
     }
 
