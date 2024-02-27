@@ -6,8 +6,11 @@ import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.entity.Post;
 import com.sns.room.post.repository.PostRepository;
+import com.sns.room.user.entity.User;
+import com.sns.room.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,33 +18,43 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class PostDomainService {
+public class PostService {
 
-    //포스트 레포지토리 주입
+    //4레이어드로 수정해보기
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-
-    public void savePost(Post savePost) {
+    //게시글 생성
+    public PostResponseDto createPost(PostRequestDto requestDto, Long userId) {
+        //유저 객체 생성
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NoSuchElementException("User not found with id: " + userId));
+        //게시글 객체 생성
+        Post savePost = new Post(requestDto, user);
+        //post 저장
         postRepository.save(savePost);
+        //dto 반환
+        PostResponseDto postResponseDto = new PostResponseDto(savePost);
+        return postResponseDto;
     }
 
+    //게시글 전체 조회
+    public List<PostResponseDto> findAllPost() {
+        List<Post> postList = postRepository.findAllWithUser();
+        List<PostResponseDto> postDtoList = postList.stream().map(post -> new PostResponseDto(post))
+            .collect(Collectors.toList());
+        return postDtoList;
+    }
 
-    //Post Id 검증 메서드
-    public PostResponseDto getPostId(Long postId) {
+    //게시글 선택 조회
+    public PostResponseDto getPost(Long postId) {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException(postId + "를 찾을수 없습니다."));
         PostResponseDto postResponseDto = new PostResponseDto(post);
         return postResponseDto;
     }
 
-    //게시글 전체조회 검증 메서드
-    public List<PostResponseDto> findAllPost() {
-        List<Post> postList = postRepository.findAllWithUser();
-        return postList.stream().map(post -> new PostResponseDto(post))
-            .collect(Collectors.toList());
-    }
-
-    //게시글 삭제 검증 메서드
+    //게시글 삭제
     @Transactional
     public void delete(Long postId, Long userId) {
         Post post = postRepository.findById(postId)
@@ -53,7 +66,7 @@ public class PostDomainService {
         }
     }
 
-    //게시글 수정 검증
+    //게시글 업데이트
     @Transactional
     public ResponseEntity<PostResponseDto> updatePost(Long postId, PostRequestDto requestDto,
         Long userId) {
@@ -68,7 +81,6 @@ public class PostDomainService {
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
 
-
     public Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(
             () -> {
@@ -76,6 +88,7 @@ public class PostDomainService {
                 return new InvalidPostException(message);
             }
         );
+    }
 
     public List<Post> findByUserId(Long id) {
         return postRepository.findByUserId(id);

@@ -1,5 +1,6 @@
 package com.sns.room.user.entity;
 
+import com.sns.room.global.util.Timestamped;
 import com.sns.room.post.entity.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,7 +22,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor
-public class User {
+public class User extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
