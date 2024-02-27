@@ -3,6 +3,7 @@ package com.sns.room.like.controller;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.like.dto.LikeResponseDto;
 import com.sns.room.like.service.LikeService;
+import com.sns.room.notification.service.NotificationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,11 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class LikeController {
 
     private final LikeService likeService;
+    private final NotificationService notificationService;
+
 
     @PostMapping
     public ResponseEntity<LikeResponseDto> createLike(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         likeService.createLike(postId, userDetails.getUser());
+        notificationService.notifyLike(postId);
         return ResponseEntity.status(HttpStatus.OK.value())
             .body(LikeResponseDto.builder().message("좋아요 생성").build());
     }

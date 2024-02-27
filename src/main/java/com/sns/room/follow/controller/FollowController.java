@@ -5,6 +5,7 @@ import com.sns.room.follow.dto.FollowerResponseDto;
 import com.sns.room.follow.dto.FollowingResponseDto;
 import com.sns.room.follow.service.FollowService;
 import com.sns.room.global.jwt.UserDetailsImpl;
+import com.sns.room.notification.service.NotificationService;
 import com.sns.room.post.dto.PostResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,47 +23,49 @@ import org.springframework.web.bind.annotation.RestController;
 public class FollowController {
 
     private final FollowService followService;
+    private final NotificationService notificationService;
 
     @PostMapping("/follows/{toUserId}")
     public ResponseEntity<FollowResponseDto> createFollow(
-            @AuthenticationPrincipal UserDetailsImpl userDetails,
-            @PathVariable Long toUserId) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails,
+        @PathVariable Long toUserId) {
         followService.createFollow(userDetails.getUser(), toUserId);
+        notificationService.notifyFollow(toUserId);
         return ResponseEntity.status(HttpStatus.OK.value())
-                .body(FollowResponseDto.builder().message("팔로우 성공하였습니다.").build());
+            .body(FollowResponseDto.builder().message("팔로우 성공하였습니다.").build());
     }
 
     @DeleteMapping("/follows/{toUserId}")
     public ResponseEntity<FollowResponseDto> deleteFollow(
-            @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long toUserId) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long toUserId) {
         followService.deleteFollow(userDetails.getUser(), toUserId);
         return ResponseEntity.status(HttpStatus.OK.value())
-                .body(FollowResponseDto.builder().message("팔로우 취소되었습니다.").build());
+            .body(FollowResponseDto.builder().message("팔로우 취소되었습니다.").build());
     }
 
     @GetMapping("/follows/following")
     public List<FollowingResponseDto> getFollowingList(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<FollowingResponseDto> followingResponseDtos =
-                followService.getFollowingList(userDetails.getUser());
+            followService.getFollowingList(userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followingResponseDtos).getBody();
     }
 
     @GetMapping("/follows/follower")
     public List<FollowerResponseDto> getFollowerList(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<FollowerResponseDto> followerResponseDtos =
-                followService.getFollowerList(userDetails.getUser());
+            followService.getFollowerList(userDetails.getUser());
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followerResponseDtos).getBody();
     }
 
     @GetMapping("/follows/todo")
     public ResponseEntity<List<PostResponseDto>> getAllFollowingPost(
-            @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PostResponseDto> postResponseDtos =
-                followService.getAllFollowingPost(userDetails.getUser());
+            followService.getAllFollowingPost(userDetails.getUser());
         return ResponseEntity.status(HttpStatus.OK.value()).body(postResponseDtos);
     }
 }

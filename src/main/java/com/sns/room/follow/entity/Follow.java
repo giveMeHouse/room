@@ -1,5 +1,6 @@
 package com.sns.room.follow.entity;
 
+import com.sns.room.global.util.Timestamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "follows")
 @Entity
-public class Follow {
+public class Follow extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
