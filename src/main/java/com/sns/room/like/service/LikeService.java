@@ -25,4 +25,12 @@ public class LikeService {
         Like like = new Like(postId, user.getId());
         likeRepository.save(like);
     }
+
+    public void deleteLike(Long postId, User user) {
+        postDomainService.findPost(postId);
+        Like like = likeRepository.findByUserIdAndPostId(user.getId(), postId).orElseThrow(
+            () -> new InvalidInputException("이미 좋아요 취소를 했습니다.")
+        );
+        likeRepository.delete(like);
+    }
 }
