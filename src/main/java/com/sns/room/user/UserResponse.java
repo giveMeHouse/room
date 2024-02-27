@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @Builder
-public class CommonResponse<T> {
+public class UserResponse<T> {
 	private T data;
 	private String message;
 }

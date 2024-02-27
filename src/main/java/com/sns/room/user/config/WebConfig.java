@@ -4,7 +4,6 @@ import com.sns.room.user.jwt.JwtAuthenticationFilter;
 import com.sns.room.user.jwt.JwtAuthorizationFilter;
 import com.sns.room.user.jwt.JwtUtil;
 import com.sns.room.user.jwt.UserDetailsServiceImpl;
-import javax.swing.plaf.PanelUI;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,7 +12,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -47,6 +45,7 @@ public class WebConfig {
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
 		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
 	}
+
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		// CSRF 설정
@@ -59,12 +58,9 @@ public class WebConfig {
 
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 				authorizeHttpRequests
-						.requestMatchers("/api/auth/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
-						.requestMatchers("/api/post/**").permitAll() // '/api/post/'로 시작하는 요청 모두 접근 허가
+						.requestMatchers("/api/auth/**").permitAll() //
 						.anyRequest().authenticated() // 그 외 모든 요청 인증처리
 		);
-
-
 
 		// 필터 관리
 		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);

@@ -1,6 +1,6 @@
 package com.sns.room.user.controller;
 
-import com.sns.room.user.CommonResponse;
+import com.sns.room.user.UserResponse;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.service.AuthService;
@@ -8,6 +8,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -24,7 +25,7 @@ public class AuthController {
 
 	private final AuthService authService;
 	@PostMapping("/signup")
-	public ResponseEntity<CommonResponse<String>> signup(
+	public ResponseEntity<UserResponse<String>> signup(
 			@RequestBody SignupRequestDto signupRequestDto,
 			BindingResult bindingResult) {
 
@@ -34,7 +35,7 @@ public class AuthController {
 					errorMessages.add(error.getDefaultMessage());
 				}
 				return ResponseEntity.badRequest().body(
-						CommonResponse.<String>builder()
+						UserResponse.<String>builder()
 								.data(null).message("회원가입 실패 :" + errorMessages).build()
 				);
 			}
@@ -42,24 +43,26 @@ public class AuthController {
 		authService.signup(signupRequestDto);
 
 			return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				CommonResponse.<String>builder().data(
+				UserResponse.<String>builder().data(
 						signupRequestDto.getUsername()
 				).message("회원가입 성공").build()
 		);
 	}
 
-	@GetMapping("/login")
-	public ResponseEntity<CommonResponse<String>> login(
+
+	@PostMapping("/login")
+	public ResponseEntity<UserResponse<String>> login(
 			@RequestBody LoginRequestDto loginRequestDto,
 			HttpServletResponse res) {
 
 		authService.login(loginRequestDto, res);
 
 		return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				CommonResponse.<String>builder().data(
+				UserResponse.<String>builder().data(
 						loginRequestDto.getUsername()
 				).message("로그인 성공").build()
 		);
 	}
+
 
 }
