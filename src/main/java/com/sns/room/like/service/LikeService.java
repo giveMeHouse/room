@@ -26,6 +26,11 @@ public class LikeService {
         likeRepository.save(like);
     }
 
+    public Long countLikes(Long postId) {
+        postDomainService.findPost(postId);
+        return likeRepository.countByPostId(postId);
+    }
+
     public void deleteLike(Long postId, User user) {
         postDomainService.findPost(postId);
         Like like = likeRepository.findByUserIdAndPostId(user.getId(), postId).orElseThrow(
