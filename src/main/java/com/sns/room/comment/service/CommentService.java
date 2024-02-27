@@ -37,7 +37,7 @@ public class CommentService {
         commentRepository.save(comment);
 
         return new CommentResponseDto(comment.getPost().getTitle(), comment.getUser().getUsername(),
-            comment.getComment());
+            comment.getComment(), comment.getCreatedAt(), comment.getModifiedAt());
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class CommentService {
         comment.Update(commentRequestDto.getComment());
 
         return new CommentResponseDto(comment.getPost().getTitle(), comment.getUser().getUsername(),
-            comment.getComment());
+            comment.getComment(), comment.getCreatedAt(), comment.getModifiedAt());
     }
 
 
@@ -75,7 +75,7 @@ public class CommentService {
         comment.SoftDeleted();
 
         return new CommentResponseDto(comment.getPost().getTitle(), comment.getUser().getUsername(),
-            comment.getComment());
+            comment.getComment(), comment.getCreatedAt(), comment.getModifiedAt());
     }
 
     public List<CommentResponseDto> getAllComment() {
@@ -84,7 +84,7 @@ public class CommentService {
 
         for (Comment comment : commentList) {
             responseDtoList.add(new CommentResponseDto(comment.getPost().getTitle(),
-                comment.getUser().getUsername(), comment.getComment()));
+                comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt(), comment.getModifiedAt()));
         }
 
         return responseDtoList;

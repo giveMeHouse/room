@@ -81,7 +81,6 @@ public class PostService {
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
 
-
     public Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(
             () -> {
@@ -90,8 +89,9 @@ public class PostService {
             }
         );
     }
-        public List<Post> findByUserId(Long id) {
-            return postRepository.findByUserId(id);
-        }
+
+    public List<Post> findByUserId(Long id) {
+        return postRepository.findByUserId(id);
+    }
 }
 
