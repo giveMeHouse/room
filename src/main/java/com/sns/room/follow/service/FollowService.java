@@ -52,16 +52,16 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
-    public List<FollowingResponseDto> getFollowingList(User fromUser) {
-        List<Follow> follows = followRepository.findAllByFromUserId(fromUser.getId());
+    public List<FollowingResponseDto> getFollowingList(Long fromUserId) {
+        List<Follow> follows = followRepository.findAllByFromUserId(fromUserId);
 
         return follows.stream()
             .map(FollowingResponseDto::new)
             .collect(Collectors.toList());
     }
 
-    public List<FollowerResponseDto> getFollowerList(User toUser) {
-        List<Follow> follows = followRepository.findAllByToUserId(toUser.getId());
+    public List<FollowerResponseDto> getFollowerList(Long toUserId) {
+        List<Follow> follows = followRepository.findAllByToUserId(toUserId);
 
         return follows.stream()
             .map(FollowerResponseDto::new)

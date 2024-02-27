@@ -43,20 +43,20 @@ public class FollowController {
             .body(FollowResponseDto.builder().message("팔로우 취소되었습니다.").build());
     }
 
-    @GetMapping("/follows/following")
+    @GetMapping("/users/{userId}/follows/following")
     public List<FollowingResponseDto> getFollowingList(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long userId) {
         List<FollowingResponseDto> followingResponseDtos =
-            followService.getFollowingList(userDetails.getUser());
+            followService.getFollowingList(userId);
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followingResponseDtos).getBody();
     }
 
-    @GetMapping("/follows/follower")
+    @GetMapping("/users/{userId}/follows/following")
     public List<FollowerResponseDto> getFollowerList(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long userId) {
         List<FollowerResponseDto> followerResponseDtos =
-            followService.getFollowerList(userDetails.getUser());
+            followService.getFollowerList(userId);
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followerResponseDtos).getBody();
     }
