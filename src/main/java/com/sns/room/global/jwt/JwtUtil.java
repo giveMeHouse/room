@@ -1,5 +1,6 @@
 package com.sns.room.global.jwt;
 
+
 import com.sns.room.user.entity.UserRoleEnum;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -8,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import java.security.Key;
@@ -15,6 +17,7 @@ import java.util.Base64;
 import java.util.Date;
 
 @Slf4j(topic = "JwtUtil")
+@Configuration
 @Component
 public class JwtUtil {
 
