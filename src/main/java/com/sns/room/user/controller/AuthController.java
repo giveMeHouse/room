@@ -1,6 +1,6 @@
 package com.sns.room.user.controller;
 
-import com.sns.room.user.UserResponse;
+import com.sns.room.user.dto.UserResponseDto;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.service.AuthService;
@@ -12,19 +12,17 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/auth")
 public class AuthController {
 
 	private final AuthService authService;
 	@PostMapping("/signup")
-	public ResponseEntity<UserResponse<String>> signup(
+	public ResponseEntity<UserResponseDto<String>> signup(
 			@RequestBody SignupRequestDto signupRequestDto,
 			BindingResult bindingResult) {
 
@@ -34,7 +32,7 @@ public class AuthController {
 					errorMessages.add(error.getDefaultMessage());
 				}
 				return ResponseEntity.badRequest().body(
-						UserResponse.<String>builder()
+						UserResponseDto.<String>builder()
 								.data(null).message("회원가입 실패 :" + errorMessages).build()
 				);
 			}
@@ -42,7 +40,7 @@ public class AuthController {
 		authService.signup(signupRequestDto);
 
 			return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				UserResponse.<String>builder().data(
+				UserResponseDto.<String>builder().data(
 						signupRequestDto.getUsername()
 				).message("회원가입 성공").build()
 		);
@@ -50,14 +48,14 @@ public class AuthController {
 
 
 	@PostMapping("/login")
-	public ResponseEntity<UserResponse<String>> login(
+	public ResponseEntity<UserResponseDto<String>> login(
 			@RequestBody LoginRequestDto loginRequestDto,
 			HttpServletResponse res) {
 
 		authService.login(loginRequestDto, res);
 
 		return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				UserResponse.<String>builder().data(
+				UserResponseDto.<String>builder().data(
 						loginRequestDto.getUsername()
 				).message("로그인 성공").build()
 		);
