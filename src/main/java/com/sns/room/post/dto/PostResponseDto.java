@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 
 @Getter
-@Setter
+
 public class PostResponseDto {
 
     private Long id;
@@ -24,5 +24,9 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.username = post.getUser().getUsername();
         this.modifiedAt = post.getModifiedAt();
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 }
