@@ -68,6 +68,7 @@ public class PostDomainService {
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
 
+
     public Post findPost(Long postId) {
         return postRepository.findById(postId).orElseThrow(
             () -> {
@@ -75,6 +76,9 @@ public class PostDomainService {
                 return new InvalidPostException(message);
             }
         );
+
+    public List<Post> findByUserId(Long id) {
+        return postRepository.findByUserId(id);
     }
 }
 
