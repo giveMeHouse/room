@@ -21,7 +21,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Entity
 @Getter
 @NoArgsConstructor
-@Setter //test코드용 setter
 @Table(name = "posts")
 
 public class Post {
@@ -57,6 +56,12 @@ public class Post {
         this.photo = requestDto.getPhoto();
         this.createAt = LocalDateTime.now();
         this.modifiedAt = LocalDateTime.now();
+    }
+
+
+    //test set method
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void updatePost(String title, String content) {

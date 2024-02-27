@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Setter//test용
 @Getter
 @Table(name = "users")
 @NoArgsConstructor
@@ -47,5 +46,10 @@ public class User {
         this.email = email;
         this.password = password;
         this.role = role;
+    }
+
+    //test set method
+    public void setId(Long id) {
+        this.id = id;
     }
 }
