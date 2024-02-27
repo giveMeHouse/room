@@ -28,10 +28,15 @@ public class AuthService {
         String email = signupRequestDto.getEmail();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
-        Optional<User> checkEmail = userRepository.findByEmail(email);
-        if (checkEmail.isPresent()) {
-            throw new IllegalArgumentException("중복된 email입니다.");
-        }
+				Optional<User> checkUsername = userRepository.findByUsername(username);
+				if (checkUsername.isPresent()) {
+					throw new IllegalArgumentException("중복된 username입니다..");
+				}
+
+				Optional<User> checkEmail = userRepository.findByEmail(email);
+				if (checkEmail.isPresent()) {
+					throw new IllegalArgumentException("중복된 email입니다.");
+				}
 
         UserRoleEnum role = signupRequestDto.getRole();
         if (role.equals(UserRoleEnum.ADMIN)) {
@@ -51,12 +56,9 @@ public class AuthService {
 
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 email입니다."));
-        if (!passwordEncoder.matches(password, user.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
-        }
-        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
-        jwtUtil.addJwtToHeader(token, res);
-        res.setHeader(JwtUtil.AUTHORIZATION_HEADER, token);
+				if (!passwordEncoder.matches(password, user.getPassword())) {
+					throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+				}
     }
 
     public User findUser(Long userId) {

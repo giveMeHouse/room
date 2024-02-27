@@ -3,6 +3,7 @@ package com.sns.room.global.config;
 import com.sns.room.global.jwt.JwtAuthorizationFilter;
 import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.global.jwt.UserDetailsServiceImpl;
+import com.sns.room.global.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,6 +38,13 @@ public class WebConfig {
 	}
 
 	@Bean
+	public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
+		JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+		filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
+		return filter;
+	}
+
+	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
 		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
 	}
@@ -53,14 +61,14 @@ public class WebConfig {
 
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 			authorizeHttpRequests
-				.requestMatchers("/api/auth/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+				.requestMatchers("/api/auth/**").permitAll() // '/api/auth/'로 시작하는 요청 모두 접근 허가
 				.anyRequest().authenticated() // 그 외 모든 요청 인증처리
 		);
 
 		// 필터 관리
-		http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthorizationFilter(), JwtAuthenticationFilter.class);
+		http.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
-
 }
