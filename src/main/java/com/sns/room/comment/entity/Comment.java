@@ -1,5 +1,6 @@
 package com.sns.room.comment.entity;
 
+import com.sns.room.global.util.Timestamped;
 import com.sns.room.post.entity.Post;
 import com.sns.room.user.entity.User;
 import jakarta.persistence.Column;
@@ -20,7 +21,7 @@ import org.hibernate.annotations.SQLRestriction;
 @NoArgsConstructor
 @SQLRestriction("deleted_at is NULL")
 @Table(name = "comments")
-public class Comment {
+public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
