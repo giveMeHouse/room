@@ -1,6 +1,7 @@
 package com.sns.room.post.service;
 
 
+import com.sns.room.global.exception.InvalidPostException;
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.entity.Post;
@@ -15,17 +16,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PostDomainService {
+
     //포스트 레포지토리 주입
     private final PostRepository postRepository;
 
 
-    public void savePost(Post savePost){
+    public void savePost(Post savePost) {
         postRepository.save(savePost);
     }
 
 
     //Post Id 검증 메서드
-    public PostResponseDto getPostId(Long postId){
+    public PostResponseDto getPostId(Long postId) {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new IllegalArgumentException(postId + "를 찾을수 없습니다."));
         PostResponseDto postResponseDto = new PostResponseDto(post);
@@ -66,5 +68,13 @@ public class PostDomainService {
         return ResponseEntity.ok(new PostResponseDto(updatePost));
     }
 
+    public Post findPost(Long postId) {
+        return postRepository.findById(postId).orElseThrow(
+            () -> {
+                String message = "해당 게시글이 없습니다.";
+                return new InvalidPostException(message);
+            }
+        );
+    }
 }
 
