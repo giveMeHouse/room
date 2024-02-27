@@ -1,5 +1,6 @@
 package com.sns.room.user.service;
 
+
 import com.sns.room.global.exception.InvalidInputException;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
@@ -46,6 +47,7 @@ public class AuthService {
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
+
 
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 email입니다."));

@@ -7,7 +7,8 @@ import com.sns.room.follow.repository.FollowRepository;
 import com.sns.room.global.exception.InvalidInputException;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.entity.Post;
-import com.sns.room.post.service.PostDomainService;
+import com.sns.room.post.repository.PostRepository;
+import com.sns.room.post.service.PostService;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.service.AuthService;
 import java.util.ArrayList;
@@ -23,7 +24,7 @@ public class FollowService {
 
     private final FollowRepository followRepository;
     private final AuthService authService;
-    private final PostDomainService postDomainService;
+    private final PostService postService;
 
     @Transactional
     public void createFollow(User fromUser, Long toUserId) {
@@ -74,7 +75,7 @@ public class FollowService {
 
         for (Follow follow : follows) {
             Long toUserId = follow.getToUserId();
-            posts.addAll(postDomainService.findByUserId(toUserId));
+            posts.addAll(postService.findByUserId(toUserId));
         }
         return posts.stream()
                 .map(PostResponseDto::new)
