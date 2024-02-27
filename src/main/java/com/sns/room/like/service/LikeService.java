@@ -31,6 +31,7 @@ public class LikeService {
         return likeRepository.countByPostId(postId);
     }
 
+    @Transactional
     public void deleteLike(Long postId, User user) {
         postDomainService.findPost(postId);
         Like like = likeRepository.findByUserIdAndPostId(user.getId(), postId).orElseThrow(
