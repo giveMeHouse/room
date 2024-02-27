@@ -11,7 +11,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sns.room.comment.controller.CommentController;
 import com.sns.room.comment.dto.CommentRequestDto;
 import com.sns.room.comment.service.CommentService;
 import com.sns.room.global.jwt.UserDetailsImpl;
@@ -56,7 +55,8 @@ class CommentControllerTest {
 
 
     @Nested
-    class CreateComment{
+    class CreateComment {
+
         @Test
         @DisplayName("댓글 생성 요청")
         void createComment() throws Exception {
@@ -76,7 +76,8 @@ class CommentControllerTest {
 
 
     @Nested
-    class UpdateComment{
+    class UpdateComment {
+
         @Test
         @DisplayName("댓글 수정 요청")
         void updateComment() throws Exception {
@@ -95,7 +96,8 @@ class CommentControllerTest {
 
 
     @Nested
-    class DeleteComment{
+    class DeleteComment {
+
         @Test
         @DisplayName("댓글 삭제 요청")
         void deleteComment() throws Exception {
@@ -113,9 +115,9 @@ class CommentControllerTest {
     }
 
 
-
     @Nested
-    class GetComment{
+    class GetComment {
+
         @Test
         @DisplayName("댓글 조회 요청")
         void getAllComment() throws Exception {
