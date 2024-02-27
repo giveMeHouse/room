@@ -2,11 +2,12 @@ package com.sns.room.user.service;
 
 
 import com.sns.room.global.exception.InvalidInputException;
+import com.sns.room.global.exception.InvalidUserException;
+import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;
-import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Optional;
@@ -53,7 +54,6 @@ public class AuthService {
         String username = loginRequestDto.getUsername();
         String password = loginRequestDto.getPassword();
 
-
         User user = userRepository.findByUsername(username)
             .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 email입니다."));
 				if (!passwordEncoder.matches(password, user.getPassword())) {
@@ -64,6 +64,11 @@ public class AuthService {
     public User findUser(Long userId) {
         return userRepository.findById(userId)
             .orElseThrow(() -> new InvalidInputException("해당 User는 존재하지 않습니다."));
+    }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new InvalidUserException("해당 User는 존재하지 않습니다."));
     }
 }
 

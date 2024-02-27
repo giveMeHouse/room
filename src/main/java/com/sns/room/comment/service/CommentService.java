@@ -84,7 +84,8 @@ public class CommentService {
 
         for (Comment comment : commentList) {
             responseDtoList.add(new CommentResponseDto(comment.getPost().getTitle(),
-                comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt(), comment.getModifiedAt()));
+                comment.getUser().getUsername(), comment.getComment(), comment.getCreatedAt(),
+                comment.getModifiedAt()));
         }
 
         return responseDtoList;
@@ -125,5 +126,12 @@ public class CommentService {
             throw new InvalidUserException("작성자만 수정/삭제가능합니다.");
         }
         return true;
+    }
+
+    public Comment findLatestComment(Long postId) {
+        return commentRepository.findFirstByPostIdOrderByCreatedAtDesc(
+            postId).orElseThrow(
+            () -> new IllegalArgumentException("댓글을 찾을 수 없습니다.")
+        );
     }
 }
