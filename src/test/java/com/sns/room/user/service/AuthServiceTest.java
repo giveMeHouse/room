@@ -2,6 +2,7 @@ package com.sns.room.user.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
@@ -50,9 +51,63 @@ class AuthServiceTest {
 	@Test
 	@DisplayName("회원가입")
 	void signup() {
+		// given
+		SignupRequestDto dto = new SignupRequestDto();
+		dto.setUsername("testUser");
+		dto.setEmail("test@email.com");
+		dto.setPassword("testPassword");
+		dto.setRole(UserRoleEnum.USER);
+
+		given(userRepository.findByUsername(dto.getUsername())).willReturn(Optional.empty());
+		given(userRepository.findByEmail(dto.getEmail())).willReturn(Optional.empty());
+		given(passwordEncoder.encode(dto.getPassword())).willReturn("encodedPassword");
+
+		// when
+		authService.signup(dto);
+
+		// then
+		verify(userRepository, times(1)).save(any(User.class));
 	}
 
 	@Test
+	@DisplayName("회원가입 실패 - username")
+	void signupUsername() {
+		// given
+		SignupRequestDto dto = new SignupRequestDto();
+		dto.setUsername("testUser");
+
+		when(userRepository.findByUsername(dto.getUsername())).thenReturn(Optional.of(new User()));
+
+		// when
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+			authService.signup(dto);
+		});
+
+		// then
+		assertEquals("중복된 username입니다.", exception.getMessage());
+	}
+
+	@Test
+	@DisplayName("회원가입 실패 - email")
+	void signupEmail() {
+		// given
+		SignupRequestDto dto = new SignupRequestDto();
+		dto.setEmail("test@emai.com");
+
+		when(userRepository.findByEmail(dto.getEmail())).thenReturn(Optional.of(new User()));
+
+		// when
+		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+			authService.signup(dto);
+		});
+
+		// then
+		assertEquals("중복된 email입니다.", exception.getMessage());
+	}
+
+
+	@Test
+	@DisplayName("로그인")
 	void loginTest() {
 		// given
 		LoginRequestDto dto = new LoginRequestDto();
@@ -76,8 +131,10 @@ class AuthServiceTest {
 		verify(passwordEncoder, times(1)).matches("testPassword", "encodePassword");
 	}
 
+
 	@Test
-	void Username() {
+	@DisplayName("로그인 실패 - username")
+	void loginUsername() {
 		// given
 		LoginRequestDto loginRequestDto = new LoginRequestDto("testUsername", "testPassword");
 
@@ -92,9 +149,11 @@ class AuthServiceTest {
 		assertEquals("존재하지 않는 username입니다.", exception.getMessage());
 	}
 
+
 	@Test
-	void Password() {
-		// Given
+	@DisplayName("로그인 실패 - password")
+	void loginPassword() {
+		// given
 		String username = "testUsername";
 		String password = "5000";
 		LoginRequestDto loginRequestDto = new LoginRequestDto(username, password);
@@ -106,7 +165,7 @@ class AuthServiceTest {
 		when(userRepository.findByUsername(username)).thenReturn(Optional.of(user));
 		when(passwordEncoder.matches(password, user.getPassword())).thenReturn(false);
 
-		// When, Then
+		// when, then
 		IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
 			authService.login(loginRequestDto, response);
 		});
