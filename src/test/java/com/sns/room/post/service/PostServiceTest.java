@@ -54,7 +54,7 @@ class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L,"test","test@test.com","test", UserRoleEnum.USER);
+        user = new User("test", "test@test.com", "test", UserRoleEnum.USER);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
@@ -67,9 +67,11 @@ class PostServiceTest {
     void getAllPost() {
         // given
         List<Post> postList = new ArrayList<>();
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L, "title", "content", "category",
+            fake);
         Post post = new Post(postRequestDto, user);
-        PostRequestDto postRequestDto2 = new PostRequestDto(2L,"title2", "content2", "category", fake);
+        PostRequestDto postRequestDto2 = new PostRequestDto(2L, "title2", "content2", "category",
+            fake);
         Post post2 = new Post(postRequestDto2, user);
         postList.add(post);
         postList.add(post2);
@@ -90,7 +92,8 @@ class PostServiceTest {
     @Test
     @DisplayName("게시글 선택 조회")
     void getPost() {
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L, "title", "content", "category",
+            fake);
         Post post = new Post(postRequestDto, user);
         given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
@@ -107,7 +110,8 @@ class PostServiceTest {
     @DisplayName("게시글 생성")
     void createPost() {
         //given
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L, "title", "content", "category",
+            fake);
         Post post = Post.builder()
             .title("New Post")
             .content("This is a new post.")
@@ -128,12 +132,14 @@ class PostServiceTest {
         assertEquals("title", savedPost.getTitle());
         assertEquals("content", savedPost.getContent());
     }
+
     @Test
     @DisplayName("게시글 삭제")
     void deletePost() {
         // given
         Long postId = 1L;
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L, "title", "content", "category",
+            fake);
         Post post = new Post(postRequestDto, user);
 
         given(postRepository.findById(postId)).willReturn(Optional.of(post));
@@ -151,10 +157,11 @@ class PostServiceTest {
     void updatePost() {
         // given
         Long postId = 1L;
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L, "title", "content", "category",
+            fake);
         Post post = new Post(postRequestDto, user);
         //수정할 내용
-        PostRequestDto updatePostRequestDto = new PostRequestDto(1L,"수정", "수정", "category", fake);
+        PostRequestDto updatePostRequestDto = new PostRequestDto(1L, "수정", "수정", "category", fake);
 
         given(postRepository.findById(postId)).willReturn(Optional.of(post));
 

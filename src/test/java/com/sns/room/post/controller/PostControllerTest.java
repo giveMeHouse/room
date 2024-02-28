@@ -64,7 +64,7 @@ class PostControllerTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L,"test","test@test.com","test",UserRoleEnum.USER);
+        user = new User("test","test@test.com","test",UserRoleEnum.USER);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
