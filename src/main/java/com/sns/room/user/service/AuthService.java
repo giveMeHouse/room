@@ -66,9 +66,5 @@ public class AuthService {
             .orElseThrow(() -> new InvalidInputException("해당 User는 존재하지 않습니다."));
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-            .orElseThrow(() -> new InvalidUserException("해당 User는 존재하지 않습니다."));
-    }
 }
 
