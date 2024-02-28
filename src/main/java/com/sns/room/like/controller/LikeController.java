@@ -23,28 +23,26 @@ public class LikeController {
     private final LikeService likeService;
     private final NotificationService notificationService;
 
-
     @PostMapping
-    public ResponseEntity<LikeResponseDto> createLike(@PathVariable Long postId,
+    public ResponseEntity<Void> createLike(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         likeService.createLike(postId, userDetails.getUser());
         notificationService.notifyLike(postId);
-        return ResponseEntity.status(HttpStatus.OK.value())
-            .body(LikeResponseDto.builder().message("좋아요 생성").build());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
     @GetMapping
     public ResponseEntity<LikeResponseDto> countLikes(@PathVariable Long postId) {
         return ResponseEntity.status(HttpStatus.OK.value()).body(
-            LikeResponseDto.builder().likeCount(likeService.countLikes(postId)).message("좋아요 수 조회")
-                .build());
+            LikeResponseDto.builder().likeCount(likeService.countLikes(postId)).build());
     }
 
     @DeleteMapping
-    public ResponseEntity<LikeResponseDto> deleteLike(@PathVariable Long postId,
+    public ResponseEntity<Void> deleteLike(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         likeService.deleteLike(postId, userDetails.getUser());
-        return ResponseEntity.status(HttpStatus.OK.value())
-            .body(LikeResponseDto.builder().message("좋아요 취소").build());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 }
