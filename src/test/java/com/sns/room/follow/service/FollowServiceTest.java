@@ -180,7 +180,8 @@ class FollowServiceTest {
         List<Follow> follows = new ArrayList<>();
         follows.add(testFollow);
 
-        Post post = new Post(new PostRequestDto("title", "content", "photo", LocalDateTime.now()),
+        Post post = new Post(
+            new PostRequestDto(1L, "title", "content", "photo", LocalDateTime.now()),
             testFromUser);
         List<Post> posts = new ArrayList<>();
         posts.add(post);
