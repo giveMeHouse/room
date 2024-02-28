@@ -25,6 +25,7 @@ import com.sns.room.comment.entity.Comment;
 import com.sns.room.comment.repository.CommentRepository;
 import com.sns.room.comment.service.CommentService;
 import com.sns.room.global.jwt.UserDetailsImpl;
+import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.entity.Post;
 import com.sns.room.post.repository.PostRepository;
 import com.sns.room.user.entity.User;
@@ -44,6 +45,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -82,7 +84,7 @@ class CommentControllerTest {
 //    }
 @BeforeEach
 void setUp() {
-    user = new User(1L,"test","test@test.com","test",UserRoleEnum.USER);
+    user = new User("test","test@test.com","test",UserRoleEnum.USER);
     UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
     SecurityContextHolder.getContext()
         .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
@@ -92,31 +94,6 @@ void setUp() {
 
     @Nested
     class CreateComment {
-
-//        @Test
-//        public void testCreateCommentReturnsValidResponse() {
-//            // Given
-//            CommentRequestDto requestDto = new CommentRequestDto();
-//            String comment = "Test comment";
-//            requestDto.setComment(comment);
-//
-//            Post post = new Post(1L, "Test Post", "Test Content", null, user);
-//            User user = new User(1L, "test@test.com", "testUser", "password", UserRoleEnum.USER);
-//            CommentResponseDto expectedResponseDto = new CommentResponseDto("Test Post", "testUser", "Test comment", LocalDateTime.now(), LocalDateTime.now());
-//
-//            when(postRepository.findById(1L)).thenReturn(Optional.of(post));
-//            when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-//            when(commentRepository.save(any(Comment.class))).thenReturn(new Comment()); // Adjust based on your method's return type
-//
-//            // When
-//            CommentResponseDto actualResponseDto = commentService.createComment(requestDto, 1L, 1L);
-//
-//            // Then
-//            assertNotNull(actualResponseDto);
-//            assertEquals(expectedResponseDto.getUsername(), actualResponseDto.getUsername());
-//            // Add more assertions as needed
-//        }
-//
         @Test
         @DisplayName("댓글 생성 요청")
         void createComment() throws Exception {
@@ -127,8 +104,9 @@ void setUp() {
             CommentRequestDto commentRequestDto = new CommentRequestDto();
             commentRequestDto.setComment(comment);
 
-
-            Post post = new Post(1L, postTitle, "content", "photo", user);
+            PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", LocalDateTime.now());
+            Post post = new Post(postRequestDto,user);
+            ReflectionTestUtils.setField(post, "id", 1L);
 
 
             LocalDateTime createdAt = LocalDateTime.now();

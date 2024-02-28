@@ -22,8 +22,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "posts")
 
 public class Post extends Timestamped {
@@ -31,18 +29,12 @@ public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String title;
-
     @Column(nullable = false)
     private String content;
-
     @Column
     private String photo;
-
-
-
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;

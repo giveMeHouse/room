@@ -40,6 +40,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -63,15 +64,13 @@ class PostControllerTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L,"test","test@test.com","test",UserRoleEnum.USER);
+        user = new User("test","test@test.com","test",UserRoleEnum.USER);
+        ReflectionTestUtils.setField(user, "id", 1L);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
-
         mockMvc = webAppContextSetup(context).build();
     }
-
-
     @Test
     @DisplayName("게시글 생성")
     @WithMockUser
@@ -101,7 +100,6 @@ class PostControllerTest {
             .addFilters(new CharacterEncodingFilter("UTF-8", true)) // 필요한 필터 추가
             .alwaysDo(print()) // 모든 요청/응답에 대해 로그를 출력
             .build();
-
 
         //given
         List<PostResponseDto> postDtoList = new ArrayList<>();
@@ -145,12 +143,8 @@ class PostControllerTest {
     @DisplayName("게시글 삭제")
     @WithMockUser
     void deletePost() throws Exception {
-        // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
-        Post post = new Post(postRequestDto, user);
         Long postId = 1L;
-        PostResponseDto postResponseDto = new PostResponseDto(post);
         doNothing().when(postService).delete(any(Long.class), any(Long.class));
 
 

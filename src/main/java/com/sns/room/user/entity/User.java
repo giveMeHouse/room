@@ -24,7 +24,7 @@ import lombok.Setter;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor
-@AllArgsConstructor
+
 public class User extends Timestamped {
 
     @Id

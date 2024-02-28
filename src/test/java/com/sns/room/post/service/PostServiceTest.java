@@ -31,6 +31,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -54,7 +55,8 @@ class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User(1L,"test","test@test.com","test", UserRoleEnum.USER);
+        user = new User("test","test@test.com","test", UserRoleEnum.USER);
+        ReflectionTestUtils.setField(user, "id", 1L);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
@@ -108,12 +110,7 @@ class PostServiceTest {
     void createPost() {
         //given
         PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
-        Post post = Post.builder()
-            .title("New Post")
-            .content("This is a new post.")
-            .photo("News")
-            .user(user)
-            .build();
+        Post post = new Post(postRequestDto,user);
 
 
         given(postRepository.save(any(Post.class))).willReturn(post);
