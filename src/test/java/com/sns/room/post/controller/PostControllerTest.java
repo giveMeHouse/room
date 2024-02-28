@@ -3,7 +3,6 @@ package com.sns.room.post.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.ArgumentMatchers.refEq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.verify;
@@ -64,11 +63,8 @@ class PostControllerTest {
 
     @BeforeEach
     void setUp() {
-        user = new User();
-        user.setId(1L);
-
+        user = new User(1L,"test","test@test.com","test",UserRoleEnum.USER);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
-
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
 
@@ -82,9 +78,8 @@ class PostControllerTest {
     void createPost() throws Exception {
         // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
-        post.setId(1L);
         PostResponseDto postResponseDto = new PostResponseDto(post);
         given(postService.createPost(any(PostRequestDto.class), any(Long.class))).willReturn(
             postResponseDto);
@@ -106,11 +101,13 @@ class PostControllerTest {
             .addFilters(new CharacterEncodingFilter("UTF-8", true)) // 필요한 필터 추가
             .alwaysDo(print()) // 모든 요청/응답에 대해 로그를 출력
             .build();
+
+
         //given
         List<PostResponseDto> postDtoList = new ArrayList<>();
-        PostRequestDto postRequestDto = new PostRequestDto("zz", "zzz", "zzz", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"zz", "zzz", "zzz", fake);
         User user1 = new User("test", "test@test", "test", UserRoleEnum.USER);
-        PostRequestDto postRequestDto2 = new PostRequestDto("zz2", "zzz2", "zzz2", fake);
+        PostRequestDto postRequestDto2 = new PostRequestDto(2L,"zz2", "zzz2", "zzz2", fake);
         User user2 = new User("test2", "test2@test", "test", UserRoleEnum.USER);
         Post post = new Post(postRequestDto, user1);
         Post post2 = new Post(postRequestDto2, user2);
@@ -135,11 +132,9 @@ class PostControllerTest {
             .alwaysDo(print()) // 모든 요청/응답에 대해 로그를 출력
             .build();
         //given
-        PostRequestDto postRequestDto = new PostRequestDto("zz", "zzz", "zzz", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"zz", "zzz", "zzz", fake);
         User user1 = new User("test", "test@test", "test", UserRoleEnum.USER);
         Post post = new Post(postRequestDto, user1);
-        Long postId = 1L;
-        post.setId(postId);
         PostResponseDto test1 = new PostResponseDto(post);
         given(postService.getPost(1L)).willReturn(test1);
         mockMvc.perform(get("/posts/1"))
@@ -152,9 +147,8 @@ class PostControllerTest {
     void deletePost() throws Exception {
         // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
-        post.setId(1L);
         Long postId = 1L;
         PostResponseDto postResponseDto = new PostResponseDto(post);
         doNothing().when(postService).delete(any(Long.class), any(Long.class));
@@ -172,10 +166,9 @@ class PostControllerTest {
     void updatePost() throws Exception {
         // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto1 = new PostRequestDto("zz", "zz", "category", fake);
-        PostRequestDto postRequestDto2 = new PostRequestDto("수정", "테스트", "category", fake);
+        PostRequestDto postRequestDto1 = new PostRequestDto(1L,"zz", "zz", "category", fake);
+        PostRequestDto postRequestDto2 = new PostRequestDto(1L,"수정", "테스트", "category", fake);
         Post originalPost = new Post(postRequestDto1, user);
-        originalPost.setId(1L);
         Long postId = 1L;
         PostResponseDto postResponseDto = new PostResponseDto(originalPost);
 

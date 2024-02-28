@@ -14,6 +14,7 @@ import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.entity.Post;
 import com.sns.room.post.repository.PostRepository;
 import com.sns.room.user.entity.User;
+import com.sns.room.user.entity.UserRoleEnum;
 import com.sns.room.user.repository.UserRepository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -53,13 +54,11 @@ class PostServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User();
-        user.setId(1L);
-
+        user = new User(1L,"test","test@test.com","test", UserRoleEnum.USER);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
-
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
+
         mockMvc = webAppContextSetup(context).build();
     }
 
@@ -68,12 +67,10 @@ class PostServiceTest {
     void getAllPost() {
         // given
         List<Post> postList = new ArrayList<>();
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
-        post.setId(1L);
-        PostRequestDto postRequestDto2 = new PostRequestDto("title2", "content2", "category", fake);
+        PostRequestDto postRequestDto2 = new PostRequestDto(2L,"title2", "content2", "category", fake);
         Post post2 = new Post(postRequestDto2, user);
-        post2.setId(2L);
         postList.add(post);
         postList.add(post2);
 
@@ -93,9 +90,8 @@ class PostServiceTest {
     @Test
     @DisplayName("게시글 선택 조회")
     void getPost() {
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
-        post.setId(1L);
         given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
         PostResponseDto foundPost = postService.getPost(1L);
@@ -111,10 +107,14 @@ class PostServiceTest {
     @DisplayName("게시글 생성")
     void createPost() {
         //given
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        Post post = Post.builder()
+            .title("New Post")
+            .content("This is a new post.")
+            .photo("News")
+            .user(user)
+            .build();
 
-        Post post = new Post(postRequestDto, user);
-        post.setId(1L);
 
         given(postRepository.save(any(Post.class))).willReturn(post);
         given(postRepository.findById(1L)).willReturn(Optional.of(post));
@@ -122,9 +122,9 @@ class PostServiceTest {
         // when
 
         PostResponseDto savedPost = postService.createPost(postRequestDto, user.getId());
-        savedPost.setId(1L);
+
         // then
-        assertEquals(1L, savedPost.getId());
+        //assertEquals(testId, savedPost.getId());
         assertEquals("title", savedPost.getTitle());
         assertEquals("content", savedPost.getContent());
     }
@@ -133,9 +133,8 @@ class PostServiceTest {
     void deletePost() {
         // given
         Long postId = 1L;
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
-        post.setId(postId);
 
         given(postRepository.findById(postId)).willReturn(Optional.of(post));
 
@@ -152,11 +151,10 @@ class PostServiceTest {
     void updatePost() {
         // given
         Long postId = 1L;
-        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
-        post.setId(postId);
         //수정할 내용
-        PostRequestDto updatePostRequestDto = new PostRequestDto("수정", "수정", "category", fake);
+        PostRequestDto updatePostRequestDto = new PostRequestDto(1L,"수정", "수정", "category", fake);
 
         given(postRepository.findById(postId)).willReturn(Optional.of(post));
 

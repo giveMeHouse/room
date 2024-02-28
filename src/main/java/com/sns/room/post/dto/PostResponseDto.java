@@ -2,10 +2,11 @@ package com.sns.room.post.dto;
 
 import com.sns.room.post.entity.Post;
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter
-
+@AllArgsConstructor
 public class PostResponseDto {
 
     private Long id;
@@ -24,9 +25,5 @@ public class PostResponseDto {
         this.createdAt = post.getCreatedAt();
         this.username = post.getUser().getUsername();
         this.modifiedAt = post.getModifiedAt();
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

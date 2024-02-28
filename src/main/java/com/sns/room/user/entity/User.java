@@ -15,6 +15,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -23,6 +24,7 @@ import lombok.Setter;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends Timestamped {
 
     @Id
@@ -55,8 +57,4 @@ public class User extends Timestamped {
         this.role = role;
     }
 
-    //test set method
-    public void setId(Long id) {
-        this.id = id;
-    }
 }
