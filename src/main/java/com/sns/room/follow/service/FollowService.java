@@ -54,8 +54,7 @@ public class FollowService {
 
     public List<FollowingResponseDto> getFollowingList(Long fromUserId) {
         List<Follow> follows = followRepository.findAllByFromUserId(fromUserId);
-        String username =
-            authService.findUser(fromUserId).getUsername();
+        String username = authService.findUser(fromUserId).getUsername();
 
         List<FollowingResponseDto> list = follows.stream()
             .map(follow -> new FollowingResponseDto(follow, username)).toList();
@@ -65,8 +64,7 @@ public class FollowService {
 
     public List<FollowerResponseDto> getFollowerList(Long toUserId) {
         List<Follow> follows = followRepository.findAllByToUserId(toUserId);
-        String username =
-            authService.findUser(toUserId).getUsername();
+        String username = authService.findUser(toUserId).getUsername();
 
         List<FollowerResponseDto> list = follows.stream()
             .map(follow -> new FollowerResponseDto(follow, username)).toList();
