@@ -1,6 +1,6 @@
 package com.sns.room.user.controller;
 
-import com.sns.room.user.dto.UserResponseDto;
+import com.sns.room.user.dto.ResponseDto;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.service.AuthService;
@@ -14,7 +14,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RestController
@@ -22,7 +21,7 @@ public class AuthController {
 
 	private final AuthService authService;
 	@PostMapping("/signup")
-	public ResponseEntity<UserResponseDto<String>> signup(
+	public ResponseEntity<ResponseDto<String>> signup(
 			@RequestBody SignupRequestDto signupRequestDto,
 			BindingResult bindingResult) {
 
@@ -32,33 +31,25 @@ public class AuthController {
 					errorMessages.add(error.getDefaultMessage());
 				}
 				return ResponseEntity.badRequest().body(
-						UserResponseDto.<String>builder()
+						ResponseDto.<String>builder()
 								.data(null).message("회원가입 실패 :" + errorMessages).build()
 				);
 			}
 
 		authService.signup(signupRequestDto);
 
-			return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				UserResponseDto.<String>builder().data(
-						signupRequestDto.getUsername()
-				).message("회원가입 성공").build()
-		);
+			return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
 	}
 
 
 	@PostMapping("/login")
-	public ResponseEntity<UserResponseDto<String>> login(
+	public ResponseEntity<ResponseDto<String>> login(
 			@RequestBody LoginRequestDto loginRequestDto,
 			HttpServletResponse res) {
 
 		authService.login(loginRequestDto, res);
 
-		return ResponseEntity.status(HttpStatusCode.valueOf(200)).body(
-				UserResponseDto.<String>builder().data(
-						loginRequestDto.getUsername()
-				).message("로그인 성공").build()
-		);
+		return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
 	}
 
 }

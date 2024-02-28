@@ -2,13 +2,14 @@ package com.sns.room.user.service;
 
 
 import com.sns.room.global.exception.InvalidInputException;
+import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;
-import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import java.net.http.HttpRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,7 +21,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtUtil jwtUtil;
+		private final JwtUtil jwtUtil;
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZaHgTBcXukeZygoC";
 
     public void signup(SignupRequestDto signupRequestDto) {
@@ -50,15 +51,16 @@ public class AuthService {
     }
 
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
-        String username = loginRequestDto.getUsername();
-        String password = loginRequestDto.getPassword();
-
-
-        User user = userRepository.findByUsername(username)
-            .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 email입니다."));
-				if (!passwordEncoder.matches(password, user.getPassword())) {
-					throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
-				}
+			String username = loginRequestDto.getUsername();
+			String password = loginRequestDto.getPassword();
+			User user = userRepository.findByUsername(username).orElseThrow(
+					() -> new IllegalArgumentException("존재하지 않는 username입니다.")
+			);
+			if (!passwordEncoder.matches(password, user.getPassword())) {
+				throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+			}
+			String token = jwtUtil.createToken(user.getUsername(),user.getRole());
+			jwtUtil.addJwtToHeader(token,res);
     }
 
     public User findUser(Long userId) {
