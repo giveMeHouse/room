@@ -9,7 +9,6 @@ import com.sns.room.user.entity.User;
 import com.sns.room.user.entity.UserRoleEnum;
 import com.sns.room.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
-import java.net.http.HttpRequest;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,6 +21,7 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 		private final JwtUtil jwtUtil;
+
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZaHgTBcXukeZygoC";
 
     public void signup(SignupRequestDto signupRequestDto) {
