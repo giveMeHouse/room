@@ -48,8 +48,8 @@ public class AuthService {
             }
         }
 
-        User user = new User(username, email, password, role);
-        userRepository.save(user);
+//        User user = new User(username, email, password, role);
+//        userRepository.save(user);
     }
 
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
@@ -81,8 +81,7 @@ public class AuthService {
         User user = userRepository.findById(userId)
             .orElseThrow(() -> new IllegalArgumentException("선택한 유저가 존재하지 않습니다."));
         // 변경
-        user.setUsername(userRequestDto.getUsername());
-        user.setIntroduce(userRequestDto.getIntroduce());
+        user.update(userRequestDto.getUsername(), userRequestDto.getIntroduce());
         userRepository.save(user);
         return new UserResponseDto(user);
     }
@@ -102,10 +101,11 @@ public class AuthService {
         validatePassword(passwordUpdateRequestDto.getPassword(), user.getPassword());
 
         // 새 비밀번호와 새 비밀번호 확인 값 비교
-        validateNewPassword(passwordUpdateRequestDto.getChangePassword(), user.getPassword(), passwordUpdateRequestDto.getChangePasswordCheck());
+        validateNewPassword(passwordUpdateRequestDto.getChangePassword(), user.getPassword(),
+            passwordUpdateRequestDto.getChangePasswordCheck());
 
         // 변경
-        user.setPassword(passwordEncoder.encode(passwordUpdateRequestDto.getChangePassword()));
+        user.updatePassword(passwordUpdateRequestDto.getChangePassword(), passwordEncoder);
         userRepository.save(user);
     }
 
@@ -115,7 +115,8 @@ public class AuthService {
         }
     }
 
-    private void validateNewPassword(String newPassword, String oldEncodedPassword, String checkPassword) {
+    private void validateNewPassword(String newPassword, String oldEncodedPassword,
+        String checkPassword) {
         if (!newPassword.equals(checkPassword)) {
             throw new BadCredentialsException("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
         }

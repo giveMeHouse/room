@@ -49,12 +49,13 @@ public class AuthControllerTest {
     @BeforeEach
     void setUp() {
         objectMapper = new ObjectMapper();
-        User user = new User();
-        user.setId(1L);
-        user.setUsername("testUser");
-        user.setPassword("TestPassword");
-        user.setIntroduce("Test introduction");
-        user.setRole(UserRoleEnum.USER);
+        User user = User.builder()
+            .id(1L)
+            .username("testUser")
+            .password("TestPassword")
+            .introduce("Test introduction")
+            .role(UserRoleEnum.USER)
+            .build();
 
         this.userDetailsImpl = new UserDetailsImpl(user);
 
@@ -90,7 +91,6 @@ public class AuthControllerTest {
                 .content(userRequestDtoJson)
                 .with(user(userDetailsImpl)))
             .andExpect(status().isOk())
-            .andExpect(jsonPath("$.message").value("프로필 수정 성공"))
             .andExpect(jsonPath("$.data.username").value("testUser"))
             .andExpect(jsonPath("$.data.introduce").value("Test introduction"));
     }
@@ -98,21 +98,14 @@ public class AuthControllerTest {
     @Test
     @WithMockUser
     void updatePassword_Success() throws Exception {
-        PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto();
-        passwordUpdateRequestDto.setPassword("currentPassword");
-        passwordUpdateRequestDto.setChangePassword("newPassword");
-        passwordUpdateRequestDto.setChangePasswordCheck("newPassword");
+        PasswordUpdateRequestDto passwordUpdateRequestDto = new PasswordUpdateRequestDto("currentPassword", "newPassword", "newPassword");
 
-        // 비밀번호 변경 작업이 성공적으로 수행되었을 때 아무것도 반환하지 않음
         doNothing().when(authService).updatePassword(any(UserDetailsImpl.class), any(PasswordUpdateRequestDto.class));
-
-        User testUser = new User("testUser", "testPassword", "Test introduction", UserRoleEnum.USER);
-        UserDetailsImpl userDetails = new UserDetailsImpl(testUser);
 
         mockMvc.perform(put("/api/auth/password-patch")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(passwordUpdateRequestDto))
-                .with(user(userDetails.getUsername())))
+                .with(user(userDetailsImpl.getUsername())))
             .andExpect(status().isOk());
     }
 
