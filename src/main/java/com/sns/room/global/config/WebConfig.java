@@ -47,8 +47,7 @@ public class WebConfig {
 
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 			authorizeHttpRequests
-					.requestMatchers("/login").permitAll() // 로그인 요청 허용
-					.requestMatchers("/signup").permitAll() // 로그인 요청 허용
+					.requestMatchers("/auth/**").permitAll()
 					.anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
 		);
 

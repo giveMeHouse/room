@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
 	private final AuthService authService;
-	@PostMapping("/signup")
+	@PostMapping("/auth/signup")
 	public ResponseEntity<ResponseDto<String>> signup(
 			@RequestBody SignupRequestDto signupRequestDto,
 			BindingResult bindingResult) {
@@ -42,7 +42,7 @@ public class AuthController {
 	}
 
 
-	@PostMapping("/login")
+	@PostMapping("/auth/login")
 	public ResponseEntity<ResponseDto<String>> login(
 			@RequestBody LoginRequestDto loginRequestDto,
 			HttpServletResponse res) {
