@@ -12,4 +12,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     List<Post> findAllWithUser();
 
     Optional<Post> findById(Long id);
+
+    List<Post> findByUserId(Long id);
 }
+
+//postDomain 추상적이다.
+//PostEntity 실제 적용되는 코드

@@ -13,7 +13,7 @@ public class ControllerAdvice {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidationException(
-            MethodArgumentNotValidException e) {
+        MethodArgumentNotValidException e) {
         log.error("회원 검증 실패", e);
         String message = e.getBindingResult().getAllErrors().get(0).getDefaultMessage();
         ErrorResponse errorResponse = new ErrorResponse(message);
@@ -38,5 +38,10 @@ public class ControllerAdvice {
     public ResponseEntity<String> handleUnhandledException(RuntimeException e) {
         log.error("처리되지 않은 예외 발생", e);
         return ResponseEntity.badRequest().body("Unhandled Exception");
+    }
+
+    @ExceptionHandler(InvalidCommentException.class)
+    public ResponseEntity<ErrorResponse> handleInvalidCommentException(InvalidCommentException e) {
+        return ResponseEntity.badRequest().body(new ErrorResponse(e.getMessage()));
     }
 }

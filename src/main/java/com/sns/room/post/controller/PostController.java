@@ -3,7 +3,7 @@ package com.sns.room.post.controller;
 
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
-import com.sns.room.post.business.PostService;
+import com.sns.room.post.service.PostService;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
