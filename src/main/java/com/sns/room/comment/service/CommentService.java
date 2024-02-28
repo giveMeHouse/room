@@ -29,7 +29,7 @@ public class CommentService {
     public CommentResponseDto createComment(CommentRequestDto commentRequestDto, long postId,
         long userId) {
         Post post = checkPost(postId);
-
+        System.out.println(post+"포스트를 확인해주세요");
         User user = checkUser(userId);
 
         Comment comment = new Comment(commentRequestDto.getComment(), post, user);
@@ -95,6 +95,7 @@ public class CommentService {
     private Post checkPost(long postId) {
         Post post = postRepository.findById(postId)
             .orElseThrow(() -> new InvalidPostException("존재하지 않는 게시글입니다."));
+
         return post;
     }
 
