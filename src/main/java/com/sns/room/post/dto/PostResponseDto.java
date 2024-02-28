@@ -1,13 +1,12 @@
 package com.sns.room.post.dto;
 
 import com.sns.room.post.entity.Post;
-import com.sns.room.user.entity.User;
 import java.time.LocalDateTime;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 public class PostResponseDto {
+
     private Long id;
     private String title;
     private String content;
@@ -21,7 +20,7 @@ public class PostResponseDto {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.photo = post.getPhoto();
-        this.createdAt = post.getCreateAt();
+        this.createdAt = post.getCreatedAt();
         this.username = post.getUser().getUsername();
         this.modifiedAt = post.getModifiedAt();
     }

@@ -1,7 +1,7 @@
 package com.sns.room.user.service;
 
-
 import com.sns.room.global.exception.InvalidInputException;
+import com.sns.room.global.exception.InvalidUserException;
 import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.user.dto.LoginRequestDto;
 import com.sns.room.user.dto.SignupRequestDto;
@@ -51,6 +51,7 @@ public class AuthService {
     }
 
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
+      
 			String username = loginRequestDto.getUsername();
 			String password = loginRequestDto.getPassword();
 			User user = userRepository.findByUsername(username).orElseThrow(
@@ -67,6 +68,10 @@ public class AuthService {
         return userRepository.findById(userId)
             .orElseThrow(() -> new InvalidInputException("해당 User는 존재하지 않습니다."));
     }
-
+  
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new InvalidUserException("해당 User는 존재하지 않습니다."));
+    }
 }
 

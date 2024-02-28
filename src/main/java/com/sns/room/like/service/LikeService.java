@@ -3,7 +3,6 @@ package com.sns.room.like.service;
 import com.sns.room.global.exception.InvalidInputException;
 import com.sns.room.like.entity.Like;
 import com.sns.room.like.repository.LikeRepository;
-
 import com.sns.room.post.service.PostService;
 import com.sns.room.user.entity.User;
 import lombok.RequiredArgsConstructor;
@@ -39,5 +38,10 @@ public class LikeService {
             () -> new InvalidInputException("이미 좋아요 취소를 했습니다.")
         );
         likeRepository.delete(like);
+    }
+
+    public Like findLatestLike(Long postId) {
+        return likeRepository.findFirstByPostIdOrderByCreatedAtDesc(postId)
+            .orElseThrow(() -> new IllegalArgumentException("좋아요를 찾을 수 없습니다."));
     }
 }

@@ -31,6 +31,12 @@ public class WebConfig {
 	}
 
 	@Bean
+	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
+		throws Exception {
+		return configuration.getAuthenticationManager();
+	}
+
+	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
 		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
 	}
@@ -51,10 +57,10 @@ public class WebConfig {
 					.anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
 		);
 
-
 		// 필터 관리
 		http.addFilterBefore(jwtAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
 	}
+
 }
