@@ -60,6 +60,13 @@ public class User extends Timestamped {
         this.introduce = introduce;
     }
 
+    public User(String username, String email, String password, UserRoleEnum role) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
     public void update(String username, String introduce) {
         this.username = username;
         this.introduce = introduce;
