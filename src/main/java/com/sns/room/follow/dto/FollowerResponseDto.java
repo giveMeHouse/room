@@ -7,8 +7,10 @@ import lombok.Getter;
 public class FollowerResponseDto {
 
     private Long fromUserId;
+    private String username;
 
-    public FollowerResponseDto(Follow follow) {
+    public FollowerResponseDto(Follow follow, String username) {
         this.fromUserId = follow.getFromUserId();
+        this.username = username;
     }
 }

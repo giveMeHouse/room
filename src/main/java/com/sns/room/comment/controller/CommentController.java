@@ -5,6 +5,7 @@ import com.sns.room.comment.dto.CommentResponseDto;
 import com.sns.room.comment.dto.ResponseDto;
 import com.sns.room.comment.service.CommentService;
 import com.sns.room.global.jwt.UserDetailsImpl;
+import com.sns.room.notification.service.NotificationService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommentController {
 
     private final CommentService commentService;
+    private final NotificationService notificationService;
 
     @PostMapping
     public ResponseEntity<ResponseDto> createComment(@PathVariable Long postId,
@@ -31,6 +33,7 @@ public class CommentController {
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.createComment(commentRequestDto, postId,
             userDetails.getUser().getId());
+        notificationService.notifyComment(postId);
         return ResponseEntity.ok().body(new ResponseDto("댓글 생성 성공", responseDto));
     }
 

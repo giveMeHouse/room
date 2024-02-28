@@ -1,5 +1,6 @@
 package com.sns.room.like.entity;
 
+import com.sns.room.global.util.Timestamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Table(name = "user_post_likes")
-public class Like {
+public class Like extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

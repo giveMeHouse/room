@@ -16,8 +16,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 @Entity
 @Getter
@@ -35,6 +33,7 @@ public class Post extends Timestamped {
     private String content;
     @Column
     private String photo;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
