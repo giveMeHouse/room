@@ -7,13 +7,11 @@ import com.sns.room.follow.repository.FollowRepository;
 import com.sns.room.global.exception.InvalidInputException;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.entity.Post;
-import com.sns.room.post.repository.PostRepository;
 import com.sns.room.post.service.PostService;
 import com.sns.room.user.entity.User;
 import com.sns.room.user.service.AuthService;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +26,6 @@ public class FollowService {
 
     @Transactional
     public void createFollow(User fromUser, Long toUserId) {
-
         if (fromUser.getId().equals(toUserId)) {
             throw new InvalidInputException("자신을 팔로우할 수 없습니다.");
         }
@@ -36,9 +33,9 @@ public class FollowService {
         authService.findUser(toUserId);
 
         Follow follow = Follow.builder()
-                .fromUserId(fromUser.getId())
-                .toUserId(toUserId)
-                .build();
+            .fromUserId(fromUser.getId())
+            .toUserId(toUserId)
+            .build();
 
         followRepository.save(follow);
     }
@@ -46,27 +43,33 @@ public class FollowService {
     @Transactional
     public void deleteFollow(User fromUser, Long toUserId) {
         authService.findUser(toUserId);
+
         Follow follow = followRepository.findByFromUserIdAndToUserId(fromUser.getId(), toUserId)
-                .orElseThrow(
-                        () -> new InvalidInputException("해당 팔로우를 찾을 수 없습니다.")
-                );
+            .orElseThrow(
+                () -> new InvalidInputException("해당 팔로우를 찾을 수 없습니다.")
+            );
+
         followRepository.delete(follow);
     }
 
-    public List<FollowingResponseDto> getFollowingList(User fromUser) {
-        List<Follow> follows = followRepository.findAllByFromUserId(fromUser.getId());
+    public List<FollowingResponseDto> getFollowingList(Long fromUserId) {
+        List<Follow> follows = followRepository.findAllByFromUserId(fromUserId);
+        String username = authService.findUser(fromUserId).getUsername();
 
-        return follows.stream()
-                .map(FollowingResponseDto::new)
-                .collect(Collectors.toList());
+        List<FollowingResponseDto> list = follows.stream()
+            .map(follow -> new FollowingResponseDto(follow, username)).toList();
+
+        return list;
     }
 
-    public List<FollowerResponseDto> getFollowerList(User toUser) {
-        List<Follow> follows = followRepository.findAllByToUserId(toUser.getId());
+    public List<FollowerResponseDto> getFollowerList(Long toUserId) {
+        List<Follow> follows = followRepository.findAllByToUserId(toUserId);
+        String username = authService.findUser(toUserId).getUsername();
 
-        return follows.stream()
-                .map(FollowerResponseDto::new)
-                .collect(Collectors.toList());
+        List<FollowerResponseDto> list = follows.stream()
+            .map(follow -> new FollowerResponseDto(follow, username)).toList();
+
+        return list;
     }
 
     public List<PostResponseDto> getAllFollowingPost(User fromUser) {
@@ -77,8 +80,14 @@ public class FollowService {
             Long toUserId = follow.getToUserId();
             posts.addAll(postService.findByUserId(toUserId));
         }
+
         return posts.stream()
-                .map(PostResponseDto::new)
-                .toList();
+            .map(PostResponseDto::new)
+            .toList();
+    }
+
+    public Follow findLatestUser(Long toUserId) {
+        return followRepository.findFirstByToUserIdOrderByCreatedAtDesc(toUserId)
+            .orElseThrow(() -> new IllegalArgumentException("팔로우를 찾을 수 없습니다."));
     }
 }

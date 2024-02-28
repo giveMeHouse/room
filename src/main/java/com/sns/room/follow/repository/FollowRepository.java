@@ -12,4 +12,6 @@ public interface FollowRepository extends JpaRepository<Follow, Long> {
     List<Follow> findAllByFromUserId(Long id);
 
     List<Follow> findAllByToUserId(Long id);
+
+    Optional<Follow> findFirstByToUserIdOrderByCreatedAtDesc(Long toUserId);
 }
