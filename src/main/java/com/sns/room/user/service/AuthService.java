@@ -67,5 +67,6 @@ public class AuthService {
         return userRepository.findById(userId)
             .orElseThrow(() -> new InvalidInputException("해당 User는 존재하지 않습니다."));
     }
+
 }
 
