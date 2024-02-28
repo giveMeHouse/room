@@ -54,7 +54,7 @@ public class AuthServiceTest {
     @BeforeEach
     void setUp() {
         // User 객체 생성 시 생성자를 사용하거나 Builder 패턴을 적용
-        user = new User(1L, "testUser", "TestEmail", "Test password", UserRoleEnum.USER,
+        user = new User("testUser", "TestEmail", "Test password", UserRoleEnum.USER,
             "Test introduction");
         when(userDetails.getUser()).thenReturn(user);
 
@@ -112,7 +112,7 @@ public class AuthServiceTest {
     @Test
     void 비밀번호_변경_실패_이전_비밀번호_불일치() {
         // Given
-        User user = new User(1L, "testUser", "testEmail", "oldEncodedPassword", UserRoleEnum.USER,
+        User user = new User("testUser", "testEmail", "oldEncodedPassword", UserRoleEnum.USER,
             "Test introduction");
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 
@@ -141,7 +141,7 @@ public class AuthServiceTest {
     @Test
     void 비밀번호_변경_실패_기존_비밀번호와_동일() {
         // Given
-        User user = new User(1L, "testUser", "testEmail", "encodedOldPassword", UserRoleEnum.USER,
+        User user = new User("testUser", "testEmail", "encodedOldPassword", UserRoleEnum.USER,
             "Test introduction");
         UserDetailsImpl userDetails = new UserDetailsImpl(user);
 

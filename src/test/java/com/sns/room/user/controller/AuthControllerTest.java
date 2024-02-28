@@ -50,7 +50,6 @@ public class AuthControllerTest {
     void setUp() {
         objectMapper = new ObjectMapper();
         User user = User.builder()
-            .id(1L)
             .username("testUser")
             .password("TestPassword")
             .introduce("Test introduction")

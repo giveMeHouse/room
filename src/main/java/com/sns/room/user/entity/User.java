@@ -51,8 +51,7 @@ public class User {
 //		private LocalDateTime createAt;
 
     @Builder
-    public User(Long id, String username, String email, String password, UserRoleEnum role, String introduce) {
-        this.id = id;
+    public User(String username, String email, String password, UserRoleEnum role, String introduce) {
         this.username = username;
         this.email = email;
         this.password = password;
