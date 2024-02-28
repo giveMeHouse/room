@@ -35,6 +35,7 @@ public class PostService {
         postRepository.save(savePost);
         //dto 반환
         PostResponseDto postResponseDto = new PostResponseDto(savePost);
+        System.out.println(postResponseDto.getId());
         return postResponseDto;
     }
 

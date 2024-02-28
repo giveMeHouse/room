@@ -26,9 +26,10 @@ public class PostController {
 
     //게시글 등록
     @PostMapping("/posts")
-    public ResponseEntity<PostResponseDto> createPost(@RequestBody PostRequestDto requestDto,
-        @AuthenticationPrincipal
-        UserDetailsImpl userDetails) {
+    public ResponseEntity<PostResponseDto> createPost(
+        @RequestBody PostRequestDto requestDto,
+        @AuthenticationPrincipal UserDetailsImpl userDetails
+    ) {
         Long loginUserId = userDetails.getUser().getId();
         return ResponseEntity.ok(postService.createPost(requestDto, loginUserId));
     }

@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,6 +25,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Getter
 @Table(name = "users")
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends Timestamped {
 
     @Id
@@ -46,10 +46,6 @@ public class User extends Timestamped {
 
     @Column
     private String introduce;
-
-//
-//		@Column(nullable = false)
-//		private LocalDateTime createAt;
 
     @Builder
     public User(String username, String email, String password, UserRoleEnum role, String introduce) {
@@ -75,5 +71,4 @@ public class User extends Timestamped {
     public void updatePassword(String newPassword, PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(newPassword);
     }
-
 }
