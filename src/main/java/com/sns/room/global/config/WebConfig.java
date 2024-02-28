@@ -31,12 +31,6 @@ public class WebConfig {
 	}
 
 	@Bean
-	public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration)
-		throws Exception {
-		return configuration.getAuthenticationManager();
-	}
-
-	@Bean
 	public JwtAuthorizationFilter jwtAuthorizationFilter() {
 		return new JwtAuthorizationFilter(jwtUtil, userDetailsService);
 	}
