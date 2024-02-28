@@ -79,7 +79,6 @@ public class AuthController {
         UserResponseDto userResponseDto = authService.getUserProfile(userId);
         return ResponseEntity.ok()
             .body(ResponseDto.<UserResponseDto>builder()
-                .message("프로필 조회 성공")
                 .data(userResponseDto)
                 .build());
     }
@@ -92,7 +91,6 @@ public class AuthController {
         UserResponseDto updatedUser = authService.updateUser(userDetails, userRequestDto);
         return ResponseEntity.ok()
             .body(ResponseDto.<UserResponseDto>builder()
-                .message("프로필 수정 성공")
                 .data(updatedUser)
                 .build());
     }
@@ -105,7 +103,6 @@ public class AuthController {
         authService.updatePassword(userDetails, passwordUpdateRequestDto);
         return ResponseEntity.ok()
             .body(ResponseDto.<String>builder()
-                .message("비밀번호 수정 성공")
                 .build());
     }
 
