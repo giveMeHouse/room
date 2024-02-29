@@ -1,6 +1,5 @@
 package com.sns.room.post.service;
 
-
 import com.sns.room.global.exception.InvalidPostException;
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
