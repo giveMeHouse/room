@@ -82,14 +82,14 @@ class FollowServiceTest {
     void createSelfFollowFailTest() {
         // Given
         toUserId = 1L;
-        String reultMessage = "자신을 팔로우할 수 없습니다.";
+        String resultMessage = "자신을 팔로우할 수 없습니다.";
 
         // When
         InvalidInputException exception = assertThrows(InvalidInputException.class,
             () -> followService.createFollow(testFromUser, toUserId));
 
         // Then
-        assertThat(reultMessage).isEqualTo(exception.getMessage());
+        assertThat(resultMessage).isEqualTo(exception.getMessage());
     }
 
     @Test
@@ -113,14 +113,14 @@ class FollowServiceTest {
     void deleteFollowNotFindUserTest() {
         // Given
         toUserId = 404L;
-        String reultMessage = "해당 팔로우를 찾을 수 없습니다.";
+        String resultMessage = "해당 팔로우를 찾을 수 없습니다.";
 
         // When
         InvalidInputException exception = assertThrows(InvalidInputException.class,
             () -> followService.deleteFollow(testFromUser, toUserId));
 
         // Then
-        assertThat(reultMessage).isEqualTo(exception.getMessage());
+        assertThat(resultMessage).isEqualTo(exception.getMessage());
     }
 
     @Test
