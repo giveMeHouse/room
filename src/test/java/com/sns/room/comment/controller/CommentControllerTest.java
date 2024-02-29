@@ -1,33 +1,19 @@
-
 package com.sns.room.comment.controller;
 
-<<<<<<< HEAD
-=======
 import static org.mockito.BDDMockito.given;
->>>>>>> e9ea86afe974134c03a29b83391309047e619882
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.sns.room.comment.dto.CommentRequestDto;
-<<<<<<< HEAD
-import com.sns.room.comment.repository.CommentRepository;
-import com.sns.room.comment.service.CommentService;
-import com.sns.room.global.jwt.UserDetailsImpl;
-import com.sns.room.post.repository.PostRepository;
-import com.sns.room.user.entity.User;
-import com.sns.room.user.entity.UserRoleEnum;
-import com.sns.room.user.repository.UserRepository;
-import org.junit.jupiter.api.BeforeEach;
-=======
 import com.sns.room.comment.dto.CommentResponseDto;
 import com.sns.room.comment.service.CommentService;
 import com.sns.room.comment.test.ControllerTest;
 import com.sns.room.notification.service.NotificationService;
 import java.time.LocalDateTime;
->>>>>>> e9ea86afe974134c03a29b83391309047e619882
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -53,20 +39,10 @@ class CommentControllerTest extends ControllerTest {
         CommentRequestDto commentRequestDto = new CommentRequestDto();
         commentRequestDto.setComment(comment);
 
-<<<<<<< HEAD
-
-    @BeforeEach
-    void setUp() {
-        user = new User("test", "test@test.com", "test", UserRoleEnum.USER);
-        UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
-        SecurityContextHolder.getContext()
-            .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
-=======
         String postTitle = "postTitle";
         String username = "username";
         LocalDateTime createdAt = LocalDateTime.now();
         LocalDateTime modifiedAt = LocalDateTime.now();
->>>>>>> e9ea86afe974134c03a29b83391309047e619882
 
         CommentResponseDto responseDto = new CommentResponseDto(postTitle, username, comment,
             createdAt, modifiedAt);
@@ -85,59 +61,6 @@ class CommentControllerTest extends ControllerTest {
         action.andExpect(status().isOk())
             .andDo(print());
     }
-<<<<<<< HEAD
-//
-//    @Nested
-//    class CreateComment {
-//
-//        @Test
-//        @DisplayName("댓글 생성 요청")
-//        void createComment() throws Exception {
-//            // Given
-//            String comment = "comment";
-//            String postTitle = "postTitle";
-//            String username = "test@test.com";
-//            CommentRequestDto commentRequestDto = new CommentRequestDto();
-//            commentRequestDto.setComment(comment);
-//
-//
-//            Post post = new Post(postTitle, "content", "photo", user);
-//
-//
-//            LocalDateTime createdAt = LocalDateTime.now();
-//            LocalDateTime modifiedAt = LocalDateTime.now();
-//
-//            CommentResponseDto responseDto = new CommentResponseDto(postTitle, username, comment,
-//                createdAt, modifiedAt);
-//
-//            given(commentService.createComment(any(CommentRequestDto.class), any(Long.class),
-//                any(Long.class))).willReturn(responseDto);
-//            String jsonContent = objectMapper.writeValueAsString(responseDto);
-//
-//            // When
-//            var action = mockMvc.perform(post("/posts/{postId}/comments", post.getId())
-//                .contentType(MediaType.APPLICATION_JSON)
-//                .accept(MediaType.APPLICATION_JSON)
-//                .content(jsonContent));
-//
-//            // Then
-//            action.andExpect(status().isOk())
-//                .andExpect(jsonPath("$.message").value("댓글 생성 성공"))
-//                .andExpect(jsonPath("$.data.username").value(username))
-//                .andDo(print());
-//        }
-
-        @Nested
-        class UpdateComment {
-
-            @Test
-            @DisplayName("댓글 수정 요청")
-            void updateComment() throws Exception {
-                CommentRequestDto commentRequestDto = new CommentRequestDto();
-                commentRequestDto.setComment("comment");
-
-                var action = mockMvc.perform(put("/posts/{postId}/comments/{commentId}", "1", "1")
-=======
 
 
     @Nested
@@ -164,7 +87,6 @@ class CommentControllerTest extends ControllerTest {
             //when
             var action = mockMvc.perform(
                 put("/posts/{postId}/comments/{commentId}", TEST_POST_ID, TEST_COMMENT_ID)
->>>>>>> e9ea86afe974134c03a29b83391309047e619882
                     .contentType(MediaType.APPLICATION_JSON)
                     .accept(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(commentRequestDto)));
@@ -190,8 +112,6 @@ class CommentControllerTest extends ControllerTest {
                 .andDo(print());
         }
     }
-<<<<<<< HEAD
-=======
 
 
     @Nested
@@ -229,4 +149,3 @@ class CommentControllerTest extends ControllerTest {
     }
 
 }
->>>>>>> e9ea86afe974134c03a29b83391309047e619882
