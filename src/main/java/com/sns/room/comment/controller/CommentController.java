@@ -2,7 +2,6 @@ package com.sns.room.comment.controller;
 
 import com.sns.room.comment.dto.CommentRequestDto;
 import com.sns.room.comment.dto.CommentResponseDto;
-import com.sns.room.comment.dto.ResponseDto;
 import com.sns.room.comment.service.CommentService;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.notification.service.NotificationService;

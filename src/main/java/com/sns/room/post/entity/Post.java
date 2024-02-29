@@ -49,7 +49,6 @@ public class Post extends Timestamped {
         this.photo = requestDto.getPhoto();
     }
 
-
     public void updatePost(String title, String content) {
         this.title = title;
         this.content = content;
