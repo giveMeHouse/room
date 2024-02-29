@@ -40,6 +40,7 @@ public class CommentController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @Operation(summary = "댓글 수정", description = "댓글을 수정할 수 있는 API")
     @PutMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long postId,
         @PathVariable Long commentId,
@@ -50,6 +51,7 @@ public class CommentController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @Operation(summary = "댓글 삭제", description = "댓글을 삭제할 수 있는 API")
     @DeleteMapping("/{commentId}")
     public ResponseEntity<CommentResponseDto> deleteComment(@PathVariable Long postId,
         @PathVariable Long commentId,
@@ -59,6 +61,7 @@ public class CommentController {
         return ResponseEntity.ok().body(responseDto);
     }
 
+    @Operation(summary = "댓글 조회", description = "댓글을 조회할 수 있는 API")
     @GetMapping
     public List<CommentResponseDto> getAllComment() {
         return commentService.getAllComment();
