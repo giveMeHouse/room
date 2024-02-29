@@ -7,7 +7,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ResponseDto {
 
-    private String message;
     private CommentResponseDto data;
 
 }

@@ -34,7 +34,7 @@ public class CommentController {
         CommentResponseDto responseDto = commentService.createComment(commentRequestDto, postId,
             userDetails.getUser().getId());
         notificationService.notifyComment(postId);
-        return ResponseEntity.ok().body(new ResponseDto("댓글 생성 성공", responseDto));
+        return ResponseEntity.ok().body(new ResponseDto(responseDto));
     }
 
     @PutMapping("/{commentId}")
@@ -44,7 +44,7 @@ public class CommentController {
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.updateComment(commentRequestDto, postId,
             userDetails.getUser().getId(), commentId);
-        return ResponseEntity.ok().body(new ResponseDto("댓글 수정 성공", responseDto));
+        return ResponseEntity.ok().body(new ResponseDto(responseDto));
     }
 
     @DeleteMapping("/{commentId}")
@@ -53,7 +53,7 @@ public class CommentController {
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.deleteComment(postId,
             userDetails.getUser().getId(), commentId);
-        return ResponseEntity.ok().body(new ResponseDto("댓글 삭제 성공", responseDto));
+        return ResponseEntity.ok().body(new ResponseDto(responseDto));
     }
 
     @GetMapping
