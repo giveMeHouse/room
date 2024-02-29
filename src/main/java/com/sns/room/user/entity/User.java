@@ -1,29 +1,17 @@
 package com.sns.room.user.entity;
 
-<<<<<<< HEAD
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-=======
 import com.sns.room.global.util.Timestamped;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
->>>>>>> 4d861251d008d326fb577c12bcd7297065f99399
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-<<<<<<< HEAD
-
-@Table(name="users")
-@Entity
-@Getter
-public class User {
-=======
-import lombok.NoArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 
@@ -34,7 +22,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 public class User extends Timestamped {
 
->>>>>>> 4d861251d008d326fb577c12bcd7297065f99399
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -48,15 +35,12 @@ public class User extends Timestamped {
     @Column(nullable = false)
     private String password;
 
-<<<<<<< HEAD
     @Column
     private String introduce;
-=======
+
     @Enumerated(value = EnumType.STRING)
     private UserRoleEnum role;
 
-    @Column
-    private String introduce;
 
     @Builder
     public User(String username, String email, String password, UserRoleEnum role,
@@ -83,5 +67,4 @@ public class User extends Timestamped {
     public void updatePassword(String newPassword, PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(newPassword);
     }
->>>>>>> 4d861251d008d326fb577c12bcd7297065f99399
 }
