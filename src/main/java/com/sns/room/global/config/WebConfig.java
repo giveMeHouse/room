@@ -53,8 +53,9 @@ public class WebConfig {
 
 		http.authorizeHttpRequests((authorizeHttpRequests) ->
 			authorizeHttpRequests
-					.requestMatchers("/auth/**").permitAll()
-					.anyRequest().authenticated() // 그 외 모든 요청은 인증 필요
+				.requestMatchers("/auth/**").permitAll() // '/api/user/'로 시작하는 요청 모두 접근 허가
+				.requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
+				.anyRequest().authenticated() // 그 외 모든 요청 인증처리
 		);
 
 		// 필터 관리
