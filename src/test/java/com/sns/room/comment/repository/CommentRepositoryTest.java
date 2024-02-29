@@ -26,7 +26,7 @@ public class CommentRepositoryTest {
     @DisplayName("댓글 저장 테스트")
     void save() {
         User user = new User("username", "email", "password", UserRoleEnum.USER);
-        Post post = new Post(new PostRequestDto("title", "content", "photo", LocalDateTime.now()),
+        Post post = new Post(new PostRequestDto(1L,"title", "content", "photo", LocalDateTime.now()),
             user);
 
         Comment comment = new Comment("comment", post, user);

@@ -1,6 +1,5 @@
 package com.sns.room.follow.controller;
 
-import com.sns.room.follow.dto.FollowResponseDto;
 import com.sns.room.follow.dto.FollowerResponseDto;
 import com.sns.room.follow.dto.FollowingResponseDto;
 import com.sns.room.follow.service.FollowService;
@@ -26,37 +25,37 @@ public class FollowController {
     private final NotificationService notificationService;
 
     @PostMapping("/follows/{toUserId}")
-    public ResponseEntity<FollowResponseDto> createFollow(
+    public ResponseEntity<Void> createFollow(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
         @PathVariable Long toUserId) {
         followService.createFollow(userDetails.getUser(), toUserId);
         notificationService.notifyFollow(toUserId);
-        return ResponseEntity.status(HttpStatus.OK.value())
-            .body(FollowResponseDto.builder().message("팔로우 성공하였습니다.").build());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
     @DeleteMapping("/follows/{toUserId}")
-    public ResponseEntity<FollowResponseDto> deleteFollow(
+    public ResponseEntity<Void> deleteFollow(
         @AuthenticationPrincipal UserDetailsImpl userDetails, @PathVariable Long toUserId) {
         followService.deleteFollow(userDetails.getUser(), toUserId);
-        return ResponseEntity.status(HttpStatus.OK.value())
-            .body(FollowResponseDto.builder().message("팔로우 취소되었습니다.").build());
+
+        return ResponseEntity.status(HttpStatus.OK.value()).build();
     }
 
-    @GetMapping("/follows/following")
+    @GetMapping("/users/{userId}/follows/following")
     public List<FollowingResponseDto> getFollowingList(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long userId) {
         List<FollowingResponseDto> followingResponseDtos =
-            followService.getFollowingList(userDetails.getUser());
+            followService.getFollowingList(userId);
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followingResponseDtos).getBody();
     }
 
-    @GetMapping("/follows/follower")
+    @GetMapping("/users/{userId}/follows/follower")
     public List<FollowerResponseDto> getFollowerList(
-        @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        @PathVariable Long userId) {
         List<FollowerResponseDto> followerResponseDtos =
-            followService.getFollowerList(userDetails.getUser());
+            followService.getFollowerList(userId);
 
         return ResponseEntity.status(HttpStatus.OK.value()).body(followerResponseDtos).getBody();
     }
@@ -66,6 +65,7 @@ public class FollowController {
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PostResponseDto> postResponseDtos =
             followService.getAllFollowingPost(userDetails.getUser());
+
         return ResponseEntity.status(HttpStatus.OK.value()).body(postResponseDtos);
     }
 }

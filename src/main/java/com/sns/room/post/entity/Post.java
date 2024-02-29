@@ -11,12 +11,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "posts")
 
 public class Post extends Timestamped {
@@ -45,6 +50,7 @@ public class Post extends Timestamped {
         this.user = user;
         this.photo = requestDto.getPhoto();
     }
+
 
     public void updatePost(String title, String content) {
         this.title = title;
