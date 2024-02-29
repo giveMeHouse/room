@@ -1,10 +1,11 @@
 package com.sns.room.post.controller;
 
-
+import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.service.PostService;
-import com.sns.room.global.jwt.UserDetailsImpl;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Post", description = "게시글 컨트롤러")
 public class PostController {
 
     private final PostService postService;
 
     //게시글 등록
+    @Operation(summary = "게시글 생성", description = "게시글 생성 API")
     @PostMapping("/posts")
     public ResponseEntity<PostResponseDto> createPost(
         @RequestBody PostRequestDto requestDto,
@@ -35,6 +38,7 @@ public class PostController {
     }
 
     //게시글 전체 조회
+    @Operation(summary = "게시글 전체조회", description = "게시글 전체조회 API")
     @GetMapping("/posts")
     public ResponseEntity<List<PostResponseDto>> getAllPost() {
         List<PostResponseDto> postList = postService.findAllPost();
@@ -42,6 +46,7 @@ public class PostController {
     }
 
     //게시글 선택 조회
+    @Operation(summary = "게시글 선택조회", description = "게시글 선택조회 API")
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
         return ResponseEntity
@@ -50,21 +55,22 @@ public class PostController {
     }
 
     //게시글 삭제
+    @Operation(summary = "게시글 삭제", description = "게시글 삭제 API")
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         Long userId = userDetails.getUser().getId();
         try {
             postService.delete(postId, userId);
-            return ResponseEntity.ok("게시글이 성공적으로 삭제되었습니다.");
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("게시글 삭제 오류");
+                .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
     //게시글 수정
+    @Operation(summary = "게시글 수정", description = "게시글 수정 API")
     @PutMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId,
         @RequestBody PostRequestDto requestDto,
@@ -72,6 +78,4 @@ public class PostController {
         Long userId = userDetails.getUser().getId();
         return postService.updatePost(postId, requestDto, userId);
     }
-
-
 }
