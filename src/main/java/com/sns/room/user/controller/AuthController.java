@@ -1,13 +1,15 @@
 package com.sns.room.user.controller;
 
-import com.sns.room.user.dto.ResponseDto;
 import com.sns.room.global.jwt.UserDetailsImpl;
-import com.sns.room.user.dto.PasswordUpdateRequestDto;
 import com.sns.room.user.dto.LoginRequestDto;
+import com.sns.room.user.dto.PasswordUpdateRequestDto;
+import com.sns.room.user.dto.ResponseDto;
 import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.dto.UserRequestDto;
 import com.sns.room.user.dto.UserResponseDto;
 import com.sns.room.user.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,42 +24,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "User", description = "유저 컨트롤러")
 public class AuthController {
 
-	private final AuthService authService;
-	@PostMapping("/auth/signup")
-	public ResponseEntity<ResponseDto<String>> signup(
-			@RequestBody SignupRequestDto signupRequestDto,
-			BindingResult bindingResult) {
+    private final AuthService authService;
 
-			if (bindingResult.hasErrors()) {
-				List<String> errorMessages = new ArrayList<>();
-				for (FieldError error : bindingResult.getFieldErrors()) {
-					errorMessages.add(error.getDefaultMessage());
-				}
-				return ResponseEntity.badRequest().body(
-						ResponseDto.<String>builder()
-								.data(null).message("회원가입 실패 :" + errorMessages).build()
-				);
-			}
+    @Operation(summary = "회원가입", description = "회원가입할 수 있는 API")
+    @PostMapping("/auth/signup")
+    public ResponseEntity<ResponseDto<String>> signup(
+        @RequestBody SignupRequestDto signupRequestDto,
+        BindingResult bindingResult) {
 
-		authService.signup(signupRequestDto);
+        if (bindingResult.hasErrors()) {
+            List<String> errorMessages = new ArrayList<>();
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMessages.add(error.getDefaultMessage());
+            }
+            return ResponseEntity.badRequest().body(
+                ResponseDto.<String>builder()
+                    .data(null).message("회원가입 실패 :" + errorMessages).build()
+            );
+        }
 
-			return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
-	}
+        authService.signup(signupRequestDto);
 
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
+    }
 
-	@PostMapping("/auth/login")
-	public ResponseEntity<ResponseDto<String>> login(
-			@RequestBody LoginRequestDto loginRequestDto,
-			HttpServletResponse res) {
+    @Operation(summary = "로그인", description = "로그인할 수 있는 API")
+    @PostMapping("/auth/login")
+    public ResponseEntity<ResponseDto<String>> login(
+        @RequestBody LoginRequestDto loginRequestDto,
+        HttpServletResponse res) {
 
-		authService.login(loginRequestDto, res);
+        authService.login(loginRequestDto, res);
 
-		return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
-	}
+        return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
+    }
 
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDto<UserResponseDto>> getUser(
