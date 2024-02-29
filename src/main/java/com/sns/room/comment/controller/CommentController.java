@@ -6,6 +6,8 @@ import com.sns.room.comment.dto.ResponseDto;
 import com.sns.room.comment.service.CommentService;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.notification.service.NotificationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,39 +23,41 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Comment", description = "댓글 컨트롤러")
 @RequestMapping("/posts/{postId}/comments")
 public class CommentController {
 
     private final CommentService commentService;
     private final NotificationService notificationService;
 
+    @Operation(summary = "댓글 생성", description = "댓글을 작성할 수 있는 API")
     @PostMapping
-    public ResponseEntity<ResponseDto> createComment(@PathVariable Long postId,
+    public ResponseEntity<CommentResponseDto> createComment(@PathVariable Long postId,
         @RequestBody CommentRequestDto commentRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.createComment(commentRequestDto, postId,
             userDetails.getUser().getId());
         notificationService.notifyComment(postId);
-        return ResponseEntity.ok().body(new ResponseDto("댓글 생성 성공", responseDto));
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @PutMapping("/{commentId}")
-    public ResponseEntity<ResponseDto> updateComment(@PathVariable Long postId,
+    public ResponseEntity<CommentResponseDto> updateComment(@PathVariable Long postId,
         @PathVariable Long commentId,
         @RequestBody CommentRequestDto commentRequestDto,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.updateComment(commentRequestDto, postId,
             userDetails.getUser().getId(), commentId);
-        return ResponseEntity.ok().body(new ResponseDto("댓글 수정 성공", responseDto));
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @DeleteMapping("/{commentId}")
-    public ResponseEntity<ResponseDto> deleteComment(@PathVariable Long postId,
+    public ResponseEntity<CommentResponseDto> deleteComment(@PathVariable Long postId,
         @PathVariable Long commentId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         CommentResponseDto responseDto = commentService.deleteComment(postId,
             userDetails.getUser().getId(), commentId);
-        return ResponseEntity.ok().body(new ResponseDto("댓글 삭제 성공", responseDto));
+        return ResponseEntity.ok().body(responseDto);
     }
 
     @GetMapping

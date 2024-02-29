@@ -1,7 +1,6 @@
 package com.sns.room.user.service;
 
 import com.sns.room.global.exception.InvalidInputException;
-import com.sns.room.global.exception.InvalidUserException;
 import com.sns.room.global.jwt.JwtUtil;
 import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.user.dto.LoginRequestDto;
@@ -29,7 +28,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-		private final JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
     private final String ADMIN_TOKEN = "AAABnvxRVklrnYxKZaHgTBcXukeZygoC";
 
@@ -38,15 +37,15 @@ public class AuthService {
         String email = signupRequestDto.getEmail();
         String password = passwordEncoder.encode(signupRequestDto.getPassword());
 
-				Optional<User> checkUsername = userRepository.findByUsername(username);
-				if (checkUsername.isPresent()) {
-					throw new IllegalArgumentException("중복된 username입니다..");
-				}
+        Optional<User> checkUsername = userRepository.findByUsername(username);
+        if (checkUsername.isPresent()) {
+            throw new IllegalArgumentException("중복된 username입니다..");
+        }
 
-				Optional<User> checkEmail = userRepository.findByEmail(email);
-				if (checkEmail.isPresent()) {
-					throw new IllegalArgumentException("중복된 email입니다.");
-				}
+        Optional<User> checkEmail = userRepository.findByEmail(email);
+        if (checkEmail.isPresent()) {
+            throw new IllegalArgumentException("중복된 email입니다.");
+        }
 
         UserRoleEnum role = signupRequestDto.getRole();
         if (role.equals(UserRoleEnum.ADMIN)) {
@@ -61,16 +60,16 @@ public class AuthService {
 
     public void login(LoginRequestDto loginRequestDto, HttpServletResponse res) {
 
-			String username = loginRequestDto.getUsername();
-			String password = loginRequestDto.getPassword();
-			User user = userRepository.findByUsername(username).orElseThrow(
-					() -> new IllegalArgumentException("존재하지 않는 username입니다.")
-			);
-			if (!passwordEncoder.matches(password, user.getPassword())) {
-				throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
-			}
-			String token = jwtUtil.createToken(user.getUsername(),user.getRole());
-			jwtUtil.addJwtToHeader(token,res);
+        String username = loginRequestDto.getUsername();
+        String password = loginRequestDto.getPassword();
+        User user = userRepository.findByUsername(username).orElseThrow(
+            () -> new IllegalArgumentException("존재하지 않는 username입니다.")
+        );
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new IllegalArgumentException("잘못된 비밀번호 입니다.");
+        }
+        String token = jwtUtil.createToken(user.getUsername(), user.getRole());
+        jwtUtil.addJwtToHeader(token, res);
     }
 
     public User findUser(Long userId) {
@@ -78,10 +77,6 @@ public class AuthService {
             .orElseThrow(() -> new InvalidInputException("해당 User는 존재하지 않습니다."));
     }
 
-    public User findByUsername(String username) {
-        return userRepository.findByUsername(username)
-            .orElseThrow(() -> new InvalidUserException("해당 User는 존재하지 않습니다."));
-    }
 
     public UserResponseDto getUserProfile(Long userId) {
         User user = userRepository.findById(userId)
@@ -141,6 +136,7 @@ public class AuthService {
             throw new BadCredentialsException("새 비밀번호는 기존 비밀번호와 다르게 설정해야 합니다.");
         }
     }
+
 
 
 }
