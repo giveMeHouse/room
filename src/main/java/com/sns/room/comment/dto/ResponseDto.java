@@ -8,5 +8,4 @@ import lombok.Getter;
 public class ResponseDto {
 
     private CommentResponseDto data;
-
 }
