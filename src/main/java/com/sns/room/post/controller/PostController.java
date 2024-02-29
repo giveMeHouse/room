@@ -56,7 +56,7 @@ public class PostController {
         Long userId = userDetails.getUser().getId();
         try {
             postService.delete(postId, userId);
-            return ResponseEntity.ok("게시글이 성공적으로 삭제되었습니다.");
+                return ResponseEntity.ok("게시글이 성공적으로 삭제되었습니다.");
         } catch (Exception e) {
             return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
