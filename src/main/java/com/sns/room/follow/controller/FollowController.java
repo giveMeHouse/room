@@ -60,7 +60,7 @@ public class FollowController {
         return ResponseEntity.status(HttpStatus.OK.value()).body(followerResponseDtos).getBody();
     }
 
-    @GetMapping("/follows/todo")
+    @GetMapping("/follows/post")
     public ResponseEntity<List<PostResponseDto>> getAllFollowingPost(
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
         List<PostResponseDto> postResponseDtos =
