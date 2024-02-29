@@ -4,6 +4,8 @@ import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.service.PostService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "Post", description = "게시글 컨트롤러")
 public class PostController {
 
     private final PostService postService;
 
     //게시글 등록
+    @Operation(summary = "게시글 생성", description = "게시글 생성 API")
     @PostMapping("/posts")
     public ResponseEntity<PostResponseDto> createPost(
         @RequestBody PostRequestDto requestDto,
@@ -34,6 +38,7 @@ public class PostController {
     }
 
     //게시글 전체 조회
+    @Operation(summary = "게시글 전체조회", description = "게시글 전체조회 API")
     @GetMapping("/posts")
     public ResponseEntity<List<PostResponseDto>> getAllPost() {
         List<PostResponseDto> postList = postService.findAllPost();
@@ -41,6 +46,7 @@ public class PostController {
     }
 
     //게시글 선택 조회
+    @Operation(summary = "게시글 선택조회", description = "게시글 선택조회 API")
     @GetMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> getPost(@PathVariable Long postId) {
         return ResponseEntity
@@ -49,6 +55,7 @@ public class PostController {
     }
 
     //게시글 삭제
+    @Operation(summary = "게시글 삭제", description = "게시글 삭제 API")
     @DeleteMapping("/posts/{postId}")
     public ResponseEntity<?> deletePost(@PathVariable Long postId,
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -63,6 +70,7 @@ public class PostController {
     }
 
     //게시글 수정
+    @Operation(summary = "게시글 수정", description = "게시글 수정 API")
     @PutMapping("/posts/{postId}")
     public ResponseEntity<PostResponseDto> updatePost(@PathVariable Long postId,
         @RequestBody PostRequestDto requestDto,

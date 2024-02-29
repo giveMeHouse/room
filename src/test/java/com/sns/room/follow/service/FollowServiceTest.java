@@ -181,8 +181,9 @@ class FollowServiceTest {
         follows.add(testFollow);
 
         Post post = new Post(
-            new PostRequestDto(1L, "title", "content", "photo", LocalDateTime.now()),
+            new PostRequestDto( "title", "content", "photo", LocalDateTime.now()),
             testFromUser);
+        ReflectionTestUtils.setField(post, "id", 1L);
         List<Post> posts = new ArrayList<>();
         posts.add(post);
 

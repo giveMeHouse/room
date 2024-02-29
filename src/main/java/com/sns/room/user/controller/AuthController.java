@@ -8,6 +8,8 @@ import com.sns.room.user.dto.SignupRequestDto;
 import com.sns.room.user.dto.UserRequestDto;
 import com.sns.room.user.dto.UserResponseDto;
 import com.sns.room.user.service.AuthService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,10 +27,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
+@Tag(name = "User", description = "유저 컨트롤러")
 public class AuthController {
 
     private final AuthService authService;
-
+    @Operation(summary = "회원가입", description = "회원가입 API")
     @PostMapping("/auth/signup")
     public ResponseEntity<ResponseDto<String>> signup(
         @RequestBody SignupRequestDto signupRequestDto,
@@ -49,7 +52,7 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
     }
-
+    @Operation(summary = "로그인", description = "로그인 API")
     @PostMapping("/auth/login")
     public ResponseEntity<ResponseDto<String>> login(
         @RequestBody LoginRequestDto loginRequestDto,
@@ -59,7 +62,7 @@ public class AuthController {
 
         return ResponseEntity.status(HttpStatusCode.valueOf(200)).build();
     }
-
+    @Operation(summary = "유저 조회", description = "유저 조회 API")
     @GetMapping("/mypage")
     public ResponseEntity<ResponseDto<UserResponseDto>> getUser(
         @AuthenticationPrincipal UserDetailsImpl userDetails) {
@@ -72,7 +75,7 @@ public class AuthController {
                 .data(userResponseDto)
                 .build());
     }
-
+    @Operation(summary = "유저 마이페이지 수정", description = "유저 마이페이지 수정 API")
     @PutMapping("/mypage")
     public ResponseEntity<ResponseDto<UserResponseDto>> updateUser(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
@@ -84,7 +87,7 @@ public class AuthController {
                 .data(updatedUser)
                 .build());
     }
-
+    @Operation(summary = "유저 비밀번호 변경", description = "비밀번호 변경 API")
     @PutMapping("/password-patch")
     public ResponseEntity<ResponseDto<String>> updatePassword(
         @AuthenticationPrincipal UserDetailsImpl userDetails,
