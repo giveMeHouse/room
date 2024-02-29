@@ -1,10 +1,9 @@
 package com.sns.room.post.controller;
 
-
+import com.sns.room.global.jwt.UserDetailsImpl;
 import com.sns.room.post.dto.PostRequestDto;
 import com.sns.room.post.dto.PostResponseDto;
 import com.sns.room.post.service.PostService;
-import com.sns.room.global.jwt.UserDetailsImpl;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -56,11 +55,10 @@ public class PostController {
         Long userId = userDetails.getUser().getId();
         try {
             postService.delete(postId, userId);
-            return ResponseEntity.ok("게시글이 성공적으로 삭제되었습니다.");
+            return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("게시글 삭제 오류");
+                .status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
 
