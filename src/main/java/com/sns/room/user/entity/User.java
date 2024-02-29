@@ -9,16 +9,11 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-<<<<<<< HEAD
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-=======
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
->>>>>>> 9305310619f3daedfb98e23378b8438081e3405b
+
 
 @Entity
 @Getter
