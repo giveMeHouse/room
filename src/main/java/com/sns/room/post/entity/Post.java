@@ -12,8 +12,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -33,7 +31,8 @@ public class Post extends Timestamped {
     private String content;
     @Column
     private String photo;
-
+    @Column
+    private LocalDateTime create_at;
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -43,6 +42,7 @@ public class Post extends Timestamped {
         this.content = requestDto.getContent();
         this.user = user;
         this.photo = requestDto.getPhoto();
+        this.create_at = LocalDateTime.now();
     }
 
 
