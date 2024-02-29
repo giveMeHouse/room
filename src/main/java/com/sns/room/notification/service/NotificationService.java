@@ -71,7 +71,7 @@ public class NotificationService {
 
                 // DB 저장
                 Notification notification = new Notification();
-                notification.setPost(post);
+                notification.setPostId(post.getId());
                 notification.setSender(receiveComment.getUser().getUsername());
                 notification.setContents(receiveComment.getComment());
                 notificationRepository.save(notification);
@@ -106,7 +106,7 @@ public class NotificationService {
 
                 // DB 저장
                 Notification notification = new Notification();
-                notification.setPost(post);
+                notification.setPostId(postId);
                 notification.setContents("좋아요");
                 notification.setSender(authService.findUser(receiveLike.getUserId()).getUsername());
                 notificationRepository.save(notification);
@@ -140,7 +140,7 @@ public class NotificationService {
 
                 // DB 저장
                 Notification notification = new Notification();
-                notification.setUser(authService.findUser(userId));
+                notification.setUserId(authService.findUser(userId).getId());
                 notification.setContents("팔로우 요청");
                 notification.setSender(authService.findUser(follow.getFromUserId()).getUsername());
                 notificationRepository.save(notification);
@@ -165,12 +165,12 @@ public class NotificationService {
             () -> new IllegalArgumentException("알림을 찾을 수 없습니다.")
         );
 
-        Long userId = 0L;
+        Long userId = 0L; // 알림 받는 유저의 유저아이디.
 
-        if (notification.getPost() != null) {
-            userId = notification.getPost().getUser().getId();
-        } else {
-            userId = notification.getUser().getId();
+        if (notification.getPostId() != null) { // 게시글의 좋아요, 댓글 알림일 경우
+            userId = postService.findPost(notification.getPostId()).getUser().getId();
+        } else { // 팔로우 일경우
+            userId = notification.getUserId();
         }
 
         notificationRepository.delete(notification);
