@@ -1,40 +1,35 @@
-Project Title / 프로젝트 이름
-[뱃지나 프로젝트에 관한 이미지들이 이 위치에 들어가면 좋습니다]
-One Paragraph of project description goes here / 프로젝트의 전반적인 내용에 대한 요약을 여기에 적습니다
+# ProjceTitle: Room
+프로젝트 기간: 2월 23일~2월 28일<br><br>
+**방 아이디어 커뮤니티: 창의적인 방 꾸미기에 대한 영감을 공유하세요**<br>
+각자의 방을 더 좋게 꾸미는 의견을 공유하고 다른 회원들로부터 코멘트를 받아보면서 훌륭한 아이디어와 영감을 얻을 수 있습니다.
+다양한 아이디어를 업로드하여 다른 회원들의 의견을 들을 수 있습니다. 또한, 다른 회원들의 아이디어를 살펴보고 좋아요를 누르며 자랑할 수도 있습니다.
+우리 커뮤니티는 창의적인 아이디어와 디자인 감각을 공유하고 서로에게 영감을 주는 장소입니다.
+팔로우 댓글 좋아요등 실시간 알림을 받아보세요!
+## **개발환경**<br>
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.3-blueviolet?style=for-the-badge)](https://spring.io/projects/spring-boot)
+[![Gradle](https://img.shields.io/badge/Gradle-8.5-brightgreen?style=for-the-badge)](https://gradle.org/)
+[![Java](https://img.shields.io/badge/Java-17-orange?style=for-the-badge)](https://www.oracle.com/java/)
+[![MySQL](https://img.shields.io/badge/MySQL-8.3-blue?style=for-the-badge&logo=mysql)](https://www.mysql.com/)
+[![JUnit](https://img.shields.io/badge/JUnit-5-green?style=for-the-badge&logo=junit)](https://junit.org/junit5/)
+[![Mockito](https://img.shields.io/badge/Mockito-blue?style=for-the-badge&logo=mockito)](https://site.mockito.org/)
+## **멤버구성**
+[이건희](https://github.com/2GeonHee) **[팀장]**<br>
+[윤종일](https://github.com/pie0902)<br>
+[조우석](https://github.com/wooseok50)<br>
+[주준호](https://github.com/JooJuneHo)<br>
+[박하은](https://github.com/haeun0405)<br>
 
-Getting Started / 어떻게 시작하나요?
-이 곳에서 설치에 관련된 이야기를 해주시면 좋습니다.
 
-Prerequisites / 선행 조건
-아래 사항들이 설치가 되어있어야합니다.
+## **구현기능**
+- [x] 안녕
+- [x] 회원가입, 로그인
+- [x] 프로필 관리
+- [x] 게시물 CRUD
+- [x] 댓글 CRUD
+- [x] 좋아요 기능
+- [x] 팔로우 기능
+- [x] 댓글, 좋아요, 팔로우 알림 기능
 
-예시
-Installing / 설치
-아래 사항들로 현 프로젝트에 관한 모듈들을 설치할 수 있습니다.
-
-예시
-Running the tests / 테스트의 실행
-어떻게 테스트가 이 시스템에서 돌아가는지에 대한 설명을 합니다
-
-테스트는 이런 식으로 동작합니다
-왜 이렇게 동작하는지, 설명합니다
-
-예시
-테스트는 이런 식으로 작성하시면 됩니다
-예시
-Deployment / 배포
-Add additional notes about how to deploy this on a live system / 라이브 시스템을 배포하는 방법
-
-Built With / 누구랑 만들었나요?
-이름 - 무엇 무엇을 했어요
-Name - Create README.md
-Contributiong / 기여
-Please read CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us. / CONTRIBUTING.md 를 읽고 이에 맞추어 pull request 를 해주세요.
-
-License / 라이센스
-This project is licensed under the MIT License - see the LICENSE.md file for details / 이 프로젝트는 MIT 라이센스로 라이센스가 부여되어 있습니다. 자세한 내용은 LICENSE.md 파일을 참고하세요.
-
-Acknowledgments / 감사의 말
-Hat tip to anyone whose code was used / 코드를 사용한 모든 사용자들에게 팁
-Inspiration / 영감
-etc / 기타
+## **API 명세서**
+![스크린샷 2024-02-29 오후 12 03 29](https://github.com/giveMeHouse/room/assets/47919911/32f66fbd-fa10-41cf-8bd9-532bc213a03b)
+![스크린샷 2024-02-29 오후 12 03 49](https://github.com/giveMeHouse/room/assets/47919911/b129ef1f-6603-40f1-9ac3-c2bf86c43048)
