@@ -24,7 +24,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @RequiredArgsConstructor
 @Service
-@Transactional(readOnly = true)
 @Slf4j
 public class AuthService {
 
