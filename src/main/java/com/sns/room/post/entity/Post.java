@@ -33,6 +33,7 @@ public class Post extends Timestamped {
     private String photo;
     @Column
     private LocalDateTime create_at;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -50,5 +51,4 @@ public class Post extends Timestamped {
         this.title = title;
         this.content = content;
     }
-
 }

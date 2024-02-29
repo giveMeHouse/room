@@ -72,6 +72,4 @@ public class PostController {
         Long userId = userDetails.getUser().getId();
         return postService.updatePost(postId, requestDto, userId);
     }
-
-
 }

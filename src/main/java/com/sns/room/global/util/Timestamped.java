@@ -24,5 +24,4 @@ public class Timestamped {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private LocalDateTime modifiedAt;
-
 }
