@@ -50,8 +50,9 @@ class LikeServiceTest {
         // Given
         Long postId = 1L;
         Post testpost = new Post(
-            new PostRequestDto(1L, "title", "content", "photo", LocalDateTime.now()),
+            new PostRequestDto("title", "content", "photo", LocalDateTime.now()),
             testUser);
+        ReflectionTestUtils.setField(testpost, "id", 1L);
         given(postService.findPost(postId)).willReturn(testpost);
 
         // When
@@ -120,8 +121,9 @@ class LikeServiceTest {
         // given
         Long postId = 1L;
         Post testpost = new Post(
-            new PostRequestDto(1L, "title", "content", "photo", LocalDateTime.now()),
+            new PostRequestDto("title", "content", "photo", LocalDateTime.now()),
             testUser);
+        ReflectionTestUtils.setField(testpost, "id", 1L);
 
         given(postService.findPost(postId)).willReturn(testpost);
         given(likeRepository.countByPostId(postId)).willReturn(1L);

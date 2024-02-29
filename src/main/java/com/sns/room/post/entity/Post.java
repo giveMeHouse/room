@@ -11,16 +11,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import java.time.LocalDateTime;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
 @Table(name = "posts")
 
 public class Post extends Timestamped {
@@ -28,15 +25,16 @@ public class Post extends Timestamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
     private String title;
-
     @Column(nullable = false)
     private String content;
-
     @Column
     private String photo;
+
+    @Column
+    private LocalDateTime create_at;
+
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -47,6 +45,7 @@ public class Post extends Timestamped {
         this.content = requestDto.getContent();
         this.user = user;
         this.photo = requestDto.getPhoto();
+        this.create_at = LocalDateTime.now();
     }
 
     public void updatePost(String title, String content) {

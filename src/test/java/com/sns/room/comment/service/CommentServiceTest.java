@@ -47,9 +47,9 @@ class CommentServiceTest extends PostTest {
         User user = new User();
         ReflectionTestUtils.setField(user, "id", 1L);
 
-        Post post = new Post(new PostRequestDto(1L,"title", "content", "photo", LocalDateTime.now()),
+        Post post = new Post(new PostRequestDto("title", "content", "photo", LocalDateTime.now()),
             user);
-
+        ReflectionTestUtils.setField(post, "id", 1L);
         given(postRepository.findById(TEST_POST_ID)).willReturn(Optional.of(post));
         given(userRepository.findById(TEST_USER_ID)).willReturn(Optional.of(user));
 

@@ -41,6 +41,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -65,22 +66,21 @@ class PostControllerTest {
     @BeforeEach
     void setUp() {
         user = new User("test","test@test.com","test",UserRoleEnum.USER);
+        ReflectionTestUtils.setField(user, "id", 1L);
         UserDetailsImpl mockUserDetails = new UserDetailsImpl(user);
         SecurityContextHolder.getContext()
             .setAuthentication(new UsernamePasswordAuthenticationToken(mockUserDetails, null));
-
         mockMvc = webAppContextSetup(context).build();
     }
-
-
     @Test
     @DisplayName("게시글 생성")
     @WithMockUser
     void createPost() throws Exception {
         // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
+        PostRequestDto postRequestDto = new PostRequestDto("title", "content", "category", fake);
         Post post = new Post(postRequestDto, user);
+        ReflectionTestUtils.setField(post, "id", 1L);
         PostResponseDto postResponseDto = new PostResponseDto(post);
         given(postService.createPost(any(PostRequestDto.class), any(Long.class))).willReturn(
             postResponseDto);
@@ -103,15 +103,16 @@ class PostControllerTest {
             .alwaysDo(print()) // 모든 요청/응답에 대해 로그를 출력
             .build();
 
-
         //given
         List<PostResponseDto> postDtoList = new ArrayList<>();
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"zz", "zzz", "zzz", fake);
+        PostRequestDto postRequestDto = new PostRequestDto("zz", "zzz", "zzz", fake);
         User user1 = new User("test", "test@test", "test", UserRoleEnum.USER);
-        PostRequestDto postRequestDto2 = new PostRequestDto(2L,"zz2", "zzz2", "zzz2", fake);
+        PostRequestDto postRequestDto2 = new PostRequestDto("zz2", "zzz2", "zzz2", fake);
         User user2 = new User("test2", "test2@test", "test", UserRoleEnum.USER);
         Post post = new Post(postRequestDto, user1);
         Post post2 = new Post(postRequestDto2, user2);
+        ReflectionTestUtils.setField(post, "id", 1L);
+        ReflectionTestUtils.setField(post2, "id", 1L);
         PostResponseDto test1 = new PostResponseDto(post);
         PostResponseDto test2 = new PostResponseDto(post2);
         postDtoList.add(test1);
@@ -133,9 +134,10 @@ class PostControllerTest {
             .alwaysDo(print()) // 모든 요청/응답에 대해 로그를 출력
             .build();
         //given
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"zz", "zzz", "zzz", fake);
+        PostRequestDto postRequestDto = new PostRequestDto("zz", "zzz", "zzz", fake);
         User user1 = new User("test", "test@test", "test", UserRoleEnum.USER);
         Post post = new Post(postRequestDto, user1);
+        ReflectionTestUtils.setField(post, "id", 1L);
         PostResponseDto test1 = new PostResponseDto(post);
         given(postService.getPost(1L)).willReturn(test1);
         mockMvc.perform(get("/posts/1"))
@@ -146,12 +148,8 @@ class PostControllerTest {
     @DisplayName("게시글 삭제")
     @WithMockUser
     void deletePost() throws Exception {
-        // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto = new PostRequestDto(1L,"title", "content", "category", fake);
-        Post post = new Post(postRequestDto, user);
         Long postId = 1L;
-        PostResponseDto postResponseDto = new PostResponseDto(post);
         doNothing().when(postService).delete(any(Long.class), any(Long.class));
 
 
@@ -167,15 +165,15 @@ class PostControllerTest {
     void updatePost() throws Exception {
         // 유저 인증 설정
         // given
-        PostRequestDto postRequestDto1 = new PostRequestDto(1L,"zz", "zz", "category", fake);
-        PostRequestDto postRequestDto2 = new PostRequestDto(1L,"수정", "테스트", "category", fake);
+        PostRequestDto postRequestDto1 = new PostRequestDto("zz", "zz", "category", fake);
+        PostRequestDto postRequestDto2 = new PostRequestDto("수정", "테스트", "category", fake);
         Post originalPost = new Post(postRequestDto1, user);
         Long postId = 1L;
         PostResponseDto postResponseDto = new PostResponseDto(originalPost);
 
         given(postService.updatePost(eq(postId), any(PostRequestDto.class), eq(user.getId())))
             .willReturn(ResponseEntity.ok(postResponseDto));
-
+        ReflectionTestUtils.setField(originalPost, "id", 1L);
         // when & then
         mockMvc.perform(put("/posts/{postId}", postId)
                 .contentType(MediaType.APPLICATION_JSON)
