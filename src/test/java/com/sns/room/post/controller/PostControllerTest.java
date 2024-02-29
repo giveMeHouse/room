@@ -49,7 +49,6 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 @WebMvcTest(controllers = PostController.class)
 @MockBean(JpaMetamodelMappingContext.class)
-//@AutoConfigureMockMvc(addFilters = false)
 class PostControllerTest {
 
     @Autowired
