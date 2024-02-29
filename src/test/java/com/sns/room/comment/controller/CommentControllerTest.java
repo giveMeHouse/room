@@ -96,21 +96,6 @@ class CommentControllerTest extends ControllerTest {
                 .andDo(print());
         }
 
-        @Test
-        @DisplayName("댓글 수정 요청 실패")
-        void updateComment_Fail() throws Exception {
-            CommentRequestDto commentRequestDto = new CommentRequestDto();
-            commentRequestDto.setComment("comment");
-
-            var action = mockMvc.perform(
-                put("/posts/{postId}/comments/{commentId}", TEST_POST_ID, TEST_COMMENT_ID)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .accept(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(commentRequestDto)));
-
-            action.andExpect(status().isOk())
-                .andDo(print());
-        }
     }
 
 

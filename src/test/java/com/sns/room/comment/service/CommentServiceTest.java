@@ -29,7 +29,6 @@ class CommentServiceTest extends PostTest {
 
     @InjectMocks
     CommentService commentService;
-
     @Mock
     CommentRepository commentRepository;
     @Mock
